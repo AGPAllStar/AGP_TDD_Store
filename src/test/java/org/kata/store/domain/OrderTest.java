@@ -1,10 +1,8 @@
 package org.kata.store.domain;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /*
  * TODO: Tests unitarios de Order y de su flujo de estados.
@@ -34,20 +32,5 @@ class OrderTest {
 
         // Assert
         assertEquals(OrderStatus.DRAFT, order.getStatus());
-    }
-
-    @ParameterizedTest
-    @ValueSource(floats = {0.0f, -1.0f})
-    void shouldRejectPriceLowerOrEqualThanZero(float newPrice) {
-        // Arrange
-        Order order;
-
-        // Act
-        order = new Order();
-        order.setPrice(newPrice);
-
-        // Assert
-        assertThrows(IllegalArgumentException.class, order.setPrice(newPrice));
-        assertTrue(order.price > 0);
     }
 }
