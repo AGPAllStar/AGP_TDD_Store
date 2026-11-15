@@ -48,6 +48,8 @@ public class Order {
     public void dispatchOrder() {
         if (status == OrderStatus.DRAFT) {
             throw new IllegalStateException("The order cannot be dispatched");
+        }else if(status == OrderStatus.DISPATCHED) {
+            throw new IllegalStateException("The order is already dispatched");
         }
         setStatus(OrderStatus.DISPATCHED);
     }
