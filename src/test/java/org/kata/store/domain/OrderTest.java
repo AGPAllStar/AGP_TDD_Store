@@ -97,6 +97,24 @@ class OrderTest {
     }
 
     @Test
+    void shouldNotChangeFromDispatchedToDispatchedStatus() {
+        // Arrange
+        order = new Order(OrderStatus.DISPATCHED, 1.0f);
+
+        try {
+            // Act
+            order.dispatchOrder();
+            fail("Should have thrown an IllegalStateException");
+        }catch(IllegalStateException e) {
+            // Assert
+            assertEquals("The order is already dispatched", e.getMessage());
+        }
+
+        // Assert
+        assertEquals(OrderStatus.DISPATCHED, order.getStatus());
+    }
+
+    @Test
     void shouldChangeFromDispatchedToDeliveredStatus() {
         // Arrange
         order = new Order(OrderStatus.DISPATCHED, 1.0f);
