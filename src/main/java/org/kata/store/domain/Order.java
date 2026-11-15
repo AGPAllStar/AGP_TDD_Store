@@ -53,6 +53,9 @@ public class Order {
     }
 
     public void deliverOrder() {
+        if (status == OrderStatus.DRAFT) {
+            throw new IllegalStateException("The order cannot be delivered");
+        }
         setStatus(OrderStatus.DELIVERED);
     }
 
