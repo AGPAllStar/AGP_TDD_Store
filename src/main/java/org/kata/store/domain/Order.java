@@ -14,5 +14,4 @@ package org.kata.store.domain;
  * Un @ParameterizedTest te ahorra repetir tests casi iguales.
  */
 public class Order {
-    public OrderStatus status = OrderStatus.DRAFT;
 }
