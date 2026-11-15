@@ -15,11 +15,12 @@ package org.kata.store.domain;
  */
 public class Order {
     private OrderStatus status;
-    private float price = 1.0f;
+    private float price;
 
-    public Order()
+    public Order(float price)
     {
-        status = OrderStatus.DRAFT;
+        this.status = OrderStatus.DRAFT;
+        this.setPrice(price);
     }
 
     public OrderStatus getStatus()

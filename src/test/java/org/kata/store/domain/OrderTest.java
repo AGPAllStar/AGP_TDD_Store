@@ -1,6 +1,5 @@
 package org.kata.store.domain;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -25,13 +24,13 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class OrderTest {
 
+    // Arrange
+    private Order order;
+
     @Test
     void shouldStartInDraftStatus() {
-        // Arrange
-        Order order;
-
         // Act
-        order = new Order();
+        order = new Order(1.0f);
 
         // Assert
         assertEquals(OrderStatus.DRAFT, order.getStatus());
@@ -40,12 +39,8 @@ class OrderTest {
     @ParameterizedTest
     @ValueSource(floats = {1.0f, 3.5f, 5.99f})
     void shouldAcceptPriceHigherThanZero(float newPrice) {
-        // Arrange
-        Order order;
-
         // Act
-        order = new Order();
-        order.setPrice(newPrice);
+        order = new Order(newPrice);
 
         // Assert
         assertEquals(newPrice, order.getPrice());
@@ -54,14 +49,15 @@ class OrderTest {
     @ParameterizedTest
     @ValueSource(floats = {0.0f, -1.5f, -5.99f})
     void shouldRejectPriceLowerOrEqualThanZero(float newPrice) {
-        // Arrange
-        Order order;
-
-        // Act
-        order = new Order();
+        try {
+            // Act
+            order = new Order(newPrice);
+        }catch(IllegalArgumentException e) {
+            // Assert
+            assertEquals("Price must be greater than zero", e.getMessage());
+        }
 
         // Assert
-        assertThrows(IllegalArgumentException.class, () -> order.setPrice(newPrice));
-        assertNotEquals(newPrice, order.getPrice());
+        assertNull(order);
     }
 }
