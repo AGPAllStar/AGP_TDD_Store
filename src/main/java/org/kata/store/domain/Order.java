@@ -15,6 +15,7 @@ package org.kata.store.domain;
  */
 public class Order {
     private OrderStatus status;
+    public float price;
 
     public Order()
     {
@@ -24,5 +25,9 @@ public class Order {
     public OrderStatus getStatus()
     {
         return status;
+    }
+
+    public void setPrice(float price) {
+        this.price = price;
     }
 }

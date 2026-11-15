@@ -47,6 +47,6 @@ class OrderTest {
         order.setPrice(newPrice);
 
         // Assert
-        assertEquals(newPrice, order.getPrice());
+        assertEquals(newPrice, order.price);
     }
 }
