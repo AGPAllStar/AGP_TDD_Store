@@ -60,7 +60,7 @@ class OrderTest {
             fail("Should have thrown an IllegalStateException");
         }catch(IllegalStateException e) {
             // Assert
-            assertEquals("Cannot change from Processed to Processed", e.getMessage());
+            assertEquals("The order is already processed", e.getMessage());
         }
 
         // Assert
@@ -91,7 +91,7 @@ class OrderTest {
             fail("Should have thrown an IllegalStateException");
         }catch(IllegalStateException e) {
             // Assert
-            assertEquals("Cannot change from Draft to Dispatched", e.getMessage());
+            assertEquals("The order cannot be dispatched", e.getMessage());
         }
 
         // Assert

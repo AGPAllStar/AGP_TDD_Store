@@ -35,12 +35,15 @@ public class Order {
 
     public void processOrder() {
         if (status == OrderStatus.PROCESSED) {
-            throw new IllegalStateException("Cannot change from Processed to Processed");
+            throw new IllegalStateException("The order is already processed");
         }
         setStatus(OrderStatus.PROCESSED);
     }
 
     public void dispatchOrder() {
+        if (status == OrderStatus.DRAFT) {
+            throw new IllegalStateException("The order cannot be dispatched");
+        }
         setStatus(OrderStatus.DISPATCHED);
     }
 
