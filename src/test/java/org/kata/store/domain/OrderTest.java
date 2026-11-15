@@ -38,9 +38,30 @@ class OrderTest {
 
     @Test
     void shouldChangeFromDraftToProcessedStatus() {
+        // Arrange
+        order = new Order(1.0f);
+
         // Act
+        order.processOrder();
+
+        // Assert
+        assertEquals(OrderStatus.PROCESSED, order.getStatus());
+    }
+
+    @Test
+    void shouldNotChangeFromProcessedToProcessedStatus() {
+        // Arrange
         order = new Order(1.0f);
         order.processOrder();
+
+        try {
+            // Act
+            order.processOrder();
+            fail("Should have thrown an IllegalStateException");
+        }catch(IllegalStateException e) {
+            // Assert
+            assertEquals("Cannot go from Processed to Processed", e.getMessage());
+        }
 
         // Assert
         assertEquals(OrderStatus.PROCESSED, order.getStatus());
