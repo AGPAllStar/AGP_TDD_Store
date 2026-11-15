@@ -162,6 +162,24 @@ class OrderTest {
         assertEquals(OrderStatus.PROCESSED, order.getStatus());
     }
 
+    @Test
+    void shouldNotChangeFromDeliveredToDeliveredStatus() {
+        // Arrange
+        order = new Order(OrderStatus.DELIVERED, 1.0f);
+
+        try {
+            // Act
+            order.deliverOrder();
+            fail("Should have thrown an IllegalStateException");
+        }catch(IllegalStateException e) {
+            // Assert
+            assertEquals("The order is already delivered", e.getMessage());
+        }
+
+        // Assert
+        assertEquals(OrderStatus.DELIVERED, order.getStatus());
+    }
+
     @ParameterizedTest
     @ValueSource(floats = {1.0f, 3.5f, 5.99f})
     void shouldAcceptPriceHigherThanZero(float newPrice) {
