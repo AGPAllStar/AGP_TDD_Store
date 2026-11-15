@@ -41,6 +41,8 @@ public class Order {
     public void processOrder() {
         if (status == OrderStatus.PROCESSED) {
             throw new IllegalStateException("The order is already processed");
+        }else if (status == OrderStatus.DISPATCHED) {
+            throw new IllegalStateException("The order cannot be processed");
         }
         setStatus(OrderStatus.PROCESSED);
     }
