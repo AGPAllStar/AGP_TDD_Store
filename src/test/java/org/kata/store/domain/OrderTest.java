@@ -31,6 +31,6 @@ class OrderTest {
         order = new Order();
 
         // Assert
-        assertEquals(OrderStatus.DRAFT, order.status);
+        assertEquals(OrderStatus.DRAFT, order.getStatus());
     }
 }
