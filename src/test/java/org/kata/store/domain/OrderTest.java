@@ -96,6 +96,18 @@ class OrderTest {
         assertEquals(OrderStatus.DRAFT, order.getStatus());
     }
 
+    @Test
+    void shouldChangeFromDispatchedToDeliveredStatus() {
+        // Arrange
+        order = new Order(OrderStatus.DISPATCHED, 1.0f);
+
+        // Act
+        order.deliverOrder();
+
+        // Assert
+        assertEquals(OrderStatus.DELIVERED, order.getStatus());
+    }
+
     @ParameterizedTest
     @ValueSource(floats = {1.0f, 3.5f, 5.99f})
     void shouldAcceptPriceHigherThanZero(float newPrice) {
