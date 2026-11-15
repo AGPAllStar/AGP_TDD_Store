@@ -25,8 +25,7 @@ public class Order {
 
     public Order(float price)
     {
-        this.status = OrderStatus.DRAFT;
-        this.setPrice(price);
+        this(OrderStatus.DRAFT, price);
     }
 
     public OrderStatus getStatus()
