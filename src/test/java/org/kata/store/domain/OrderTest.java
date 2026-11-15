@@ -36,6 +36,16 @@ class OrderTest {
         assertEquals(OrderStatus.DRAFT, order.getStatus());
     }
 
+    @Test
+    void shouldChangeFromDraftToProcessedStatus() {
+        // Act
+        order = new Order(1.0f);
+        order.setProcessedStatus();
+
+        // Assert
+        assertEquals(OrderStatus.PROCESSED, order.getStatus());
+    }
+
     @ParameterizedTest
     @ValueSource(floats = {1.0f, 3.5f, 5.99f})
     void shouldAcceptPriceHigherThanZero(float newPrice) {
