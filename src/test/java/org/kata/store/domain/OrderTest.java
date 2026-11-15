@@ -60,12 +60,13 @@ class OrderTest {
             fail("Should have thrown an IllegalStateException");
         }catch(IllegalStateException e) {
             // Assert
-            assertEquals("Cannot go from Processed to Processed", e.getMessage());
+            assertEquals("Cannot change from Processed to Processed", e.getMessage());
         }
 
         // Assert
         assertEquals(OrderStatus.PROCESSED, order.getStatus());
     }
+
     @Test
     void shouldChangeFromProcessedToDispatchedStatus() {
         // Arrange
@@ -77,6 +78,24 @@ class OrderTest {
 
         // Assert
         assertEquals(OrderStatus.DISPATCHED, order.getStatus());
+    }
+
+    @Test
+    void shouldNotChangeFromDraftToDispatchedStatus() {
+        // Arrange
+        order = new Order(1.0f);
+
+        try {
+            // Act
+            order.dispatchOrder();
+            fail("Should have thrown an IllegalStateException");
+        }catch(IllegalStateException e) {
+            // Assert
+            assertEquals("Cannot change from Draft to Dispatched", e.getMessage());
+        }
+
+        // Assert
+        assertEquals(OrderStatus.DRAFT, order.getStatus());
     }
 
     @ParameterizedTest

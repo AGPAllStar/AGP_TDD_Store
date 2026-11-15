@@ -35,7 +35,7 @@ public class Order {
 
     public void processOrder() {
         if (status == OrderStatus.PROCESSED) {
-            throw new IllegalStateException("Cannot go from Processed to Processed");
+            throw new IllegalStateException("Cannot change from Processed to Processed");
         }
         setStatus(OrderStatus.PROCESSED);
     }
