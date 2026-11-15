@@ -15,7 +15,7 @@ package org.kata.store.domain;
  */
 public class Order {
     private OrderStatus status;
-    private float price;
+    private float price = 1.0f;
 
     public Order()
     {
@@ -28,6 +28,9 @@ public class Order {
     }
 
     public void setPrice(float price) {
+        if(price <= 0) {
+            throw new IllegalArgumentException("Price must be greater than zero");
+        }
         this.price = price;
     }
 

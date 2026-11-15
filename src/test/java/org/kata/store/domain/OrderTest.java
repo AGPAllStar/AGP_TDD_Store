@@ -59,7 +59,6 @@ class OrderTest {
 
         // Act
         order = new Order();
-        order.setPrice(newPrice);
 
         // Assert
         assertThrows(IllegalArgumentException.class, () -> order.setPrice(newPrice));
