@@ -40,6 +40,10 @@ public class Order {
         setStatus(OrderStatus.PROCESSED);
     }
 
+    public void dispatchOrder() {
+        setStatus(OrderStatus.DISPATCHED);
+    }
+
     public void setPrice(float price) {
         if(price <= 0) {
             throw new IllegalArgumentException("Price must be greater than zero");
