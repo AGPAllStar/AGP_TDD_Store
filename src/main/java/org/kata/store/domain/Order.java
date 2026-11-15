@@ -17,6 +17,12 @@ public class Order {
     private OrderStatus status;
     private float price;
 
+    public Order(OrderStatus status, float price)
+    {
+        this.setStatus(status);
+        this.setPrice(price);
+    }
+
     public Order(float price)
     {
         this.status = OrderStatus.DRAFT;

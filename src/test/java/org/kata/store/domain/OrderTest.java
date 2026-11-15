@@ -39,7 +39,7 @@ class OrderTest {
     @Test
     void shouldChangeFromDraftToProcessedStatus() {
         // Arrange
-        order = new Order(1.0f);
+        order = new Order(OrderStatus.DRAFT, 1.0f);
 
         // Act
         order.processOrder();
@@ -51,8 +51,7 @@ class OrderTest {
     @Test
     void shouldNotChangeFromProcessedToProcessedStatus() {
         // Arrange
-        order = new Order(1.0f);
-        order.processOrder();
+        order = new Order(OrderStatus.PROCESSED, 1.0f);
 
         try {
             // Act
@@ -70,8 +69,7 @@ class OrderTest {
     @Test
     void shouldChangeFromProcessedToDispatchedStatus() {
         // Arrange
-        order = new Order(1.0f);
-        order.processOrder();
+        order = new Order(OrderStatus.PROCESSED, 1.0f);
 
         // Act
         order.dispatchOrder();
@@ -83,7 +81,7 @@ class OrderTest {
     @Test
     void shouldNotChangeFromDraftToDispatchedStatus() {
         // Arrange
-        order = new Order(1.0f);
+        order = new Order(OrderStatus.DRAFT, 1.0f);
 
         try {
             // Act
