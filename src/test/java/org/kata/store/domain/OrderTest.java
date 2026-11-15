@@ -97,6 +97,24 @@ class OrderTest {
     }
 
     @Test
+    void shouldNotChangeFromDispatchedToProcessedStatus() {
+        // Arrange
+        order = new Order(OrderStatus.DISPATCHED, 1.0f);
+
+        try {
+            // Act
+            order.processOrder();
+            fail("Should have thrown an IllegalStateException");
+        }catch(IllegalStateException e) {
+            // Assert
+            assertEquals("The order cannot be processed", e.getMessage());
+        }
+
+        // Assert
+        assertEquals(OrderStatus.DISPATCHED, order.getStatus());
+    }
+
+    @Test
     void shouldNotChangeFromDispatchedToDispatchedStatus() {
         // Arrange
         order = new Order(OrderStatus.DISPATCHED, 1.0f);
