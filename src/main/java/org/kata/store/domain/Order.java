@@ -19,7 +19,7 @@ public class Order {
 
     public Order(OrderStatus status, float price)
     {
-        this.setStatus(status);
+        this.status = status;
         this.setPrice(price);
     }
 
@@ -35,35 +35,33 @@ public class Order {
 
     private void setStatus(OrderStatus status)
     {
+        if(status == this.status) {
+            throw new IllegalStateException("The order is already " + getStatusToString(status));
+        }else if(status.ordinal() != this.status.ordinal() + 1) {
+            throw new IllegalStateException("The order cannot be " + getStatusToString(status));
+        }
         this.status = status;
     }
 
+    private String getStatusToString(OrderStatus status) {
+        return switch (status) {
+            case OrderStatus.DRAFT -> "draft";
+            case OrderStatus.PROCESSED -> "processed";
+            case OrderStatus.DISPATCHED -> "dispatched";
+            case OrderStatus.DELIVERED -> "delivered";
+            default -> "unknown";
+        };
+    }
+
     public void processOrder() {
-        if (status == OrderStatus.PROCESSED) {
-            throw new IllegalStateException("The order is already processed");
-        }else if (status == OrderStatus.DISPATCHED) {
-            throw new IllegalStateException("The order cannot be processed");
-        }else if (status == OrderStatus.DELIVERED) {
-            throw new IllegalStateException("The order cannot be processed");
-        }
         setStatus(OrderStatus.PROCESSED);
     }
 
     public void dispatchOrder() {
-        if (status == OrderStatus.DRAFT) {
-            throw new IllegalStateException("The order cannot be dispatched");
-        }else if(status == OrderStatus.DISPATCHED) {
-            throw new IllegalStateException("The order is already dispatched");
-        }
         setStatus(OrderStatus.DISPATCHED);
     }
 
     public void deliverOrder() {
-        if (status == OrderStatus.DRAFT || status == OrderStatus.PROCESSED) {
-            throw new IllegalStateException("The order cannot be delivered");
-        }else if (status == OrderStatus.DELIVERED) {
-            throw new IllegalStateException("The order is already delivered");
-        }
         setStatus(OrderStatus.DELIVERED);
     }
 
