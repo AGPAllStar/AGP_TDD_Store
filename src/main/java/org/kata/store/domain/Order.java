@@ -28,9 +28,13 @@ public class Order {
         return status;
     }
 
-    public void setProcessedStatus()
+    private void setStatus(OrderStatus status)
     {
-        this.status = OrderStatus.PROCESSED;
+        this.status = status;
+    }
+
+    public void processOrder() {
+        setStatus(OrderStatus.PROCESSED);
     }
 
     public void setPrice(float price) {

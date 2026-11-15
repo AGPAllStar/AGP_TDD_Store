@@ -40,7 +40,7 @@ class OrderTest {
     void shouldChangeFromDraftToProcessedStatus() {
         // Act
         order = new Order(1.0f);
-        order.setProcessedStatus();
+        order.processOrder();
 
         // Assert
         assertEquals(OrderStatus.PROCESSED, order.getStatus());
