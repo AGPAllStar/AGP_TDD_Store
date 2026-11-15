@@ -66,6 +66,18 @@ class OrderTest {
         // Assert
         assertEquals(OrderStatus.PROCESSED, order.getStatus());
     }
+    @Test
+    void shouldChangeFromProcessedToDispatchedStatus() {
+        // Arrange
+        order = new Order(1.0f);
+        order.processOrder();
+
+        // Act
+        order.dispatchOrder();
+
+        // Assert
+        assertEquals(OrderStatus.DISPATCHED, order.getStatus());
+    }
 
     @ParameterizedTest
     @ValueSource(floats = {1.0f, 3.5f, 5.99f})
