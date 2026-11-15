@@ -38,7 +38,11 @@ class OrderTest {
 
     @Test
     void shouldNotAcceptANullStatus() {
-        assertThrows(NullPointerException.class, () -> {new Order(null, 1.0f);});
+        // Assert
+        assertThrows(NullPointerException.class, () -> {
+            // Act
+            new Order(null, 1.0f);
+        });
     }
 
     @Test
