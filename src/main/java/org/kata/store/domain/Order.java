@@ -57,6 +57,8 @@ public class Order {
     public void deliverOrder() {
         if (status == OrderStatus.DRAFT || status == OrderStatus.PROCESSED) {
             throw new IllegalStateException("The order cannot be delivered");
+        }else if (status == OrderStatus.DELIVERED) {
+            throw new IllegalStateException("The order is already delivered");
         }
         setStatus(OrderStatus.DELIVERED);
     }
