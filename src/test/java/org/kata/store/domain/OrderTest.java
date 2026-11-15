@@ -1,6 +1,8 @@
 package org.kata.store.domain;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -32,5 +34,19 @@ class OrderTest {
 
         // Assert
         assertEquals(OrderStatus.DRAFT, order.getStatus());
+    }
+
+    @ParameterizedTest
+    @ValueSource(floats = {1.0f, 3.5f, 5.99f})
+    void shouldAcceptPriceHigherThanZero(float newPrice) {
+        // Arrange
+        Order order;
+
+        // Act
+        order = new Order();
+        order.setPrice(newPrice);
+
+        // Assert
+        assertEquals(newPrice, order.getPrice());
     }
 }
