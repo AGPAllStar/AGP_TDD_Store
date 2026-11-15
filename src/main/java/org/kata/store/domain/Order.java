@@ -28,6 +28,11 @@ public class Order {
         return status;
     }
 
+    public void setProcessedStatus()
+    {
+        this.status = OrderStatus.PROCESSED;
+    }
+
     public void setPrice(float price) {
         if(price <= 0) {
             throw new IllegalArgumentException("Price must be greater than zero");
