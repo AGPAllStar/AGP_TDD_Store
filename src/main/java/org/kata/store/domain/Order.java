@@ -19,6 +19,9 @@ public class Order {
 
     public Order(OrderStatus status, float price)
     {
+        if(status == null){
+            throw new NullPointerException("status cannot be null");
+        }
         this.status = status;
         this.setPrice(price);
     }
