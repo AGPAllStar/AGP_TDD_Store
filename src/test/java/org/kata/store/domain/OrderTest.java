@@ -37,6 +37,11 @@ class OrderTest {
     }
 
     @Test
+    void shouldNotAcceptANullStatus() {
+        assertThrows(NullPointerException.class, () -> {new Order(null, 1.0f);});
+    }
+
+    @Test
     void shouldChangeFromDraftToProcessedStatus() {
         // Arrange
         order = new Order(OrderStatus.DRAFT, 1.0f);
