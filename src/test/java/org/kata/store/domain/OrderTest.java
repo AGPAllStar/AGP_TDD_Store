@@ -1,5 +1,6 @@
 package org.kata.store.domain;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -47,6 +48,6 @@ class OrderTest {
         order.setPrice(newPrice);
 
         // Assert
-        assertEquals(newPrice, order.price);
+        assertEquals(newPrice, order.getPrice());
     }
 }
