@@ -31,6 +31,8 @@ public class User {
     private void setSurname(String surname) {
         if (surname == null) {
             throw new IllegalArgumentException("Surname cannot be null");
+        }else if (surname.trim().isEmpty()) {
+            throw new IllegalArgumentException("Surname cannot be empty");
         }
         this.surname = surname;
     }
