@@ -65,4 +65,21 @@ class UserTest {
 
         assertNull(user);
     }
+
+    @Test
+    void shouldNotCreateUserWithSurnameNull() {
+        // Arrange
+        User user = null;
+
+        try {
+            // Act
+            user = new User("Nombre", null);
+            fail("Should have thrown an IllegalArgumentException");
+        }catch(IllegalArgumentException e) {
+            // Assert
+            assertEquals("Surname cannot be null", e.getMessage());
+        }
+
+        assertNull(user);
+    }
 }
