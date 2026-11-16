@@ -25,7 +25,7 @@ class UserTest {
         user = new User("Nombre", "Apellidos");
 
         // Assert
-        assertEquals("Nombre", user.name);
-        assertEquals("Apellidos", user.surname);
+        assertEquals("Nombre", user.getName());
+        assertEquals("Apellidos", user.getSurname());
     }
 }

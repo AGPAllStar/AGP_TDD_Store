@@ -11,11 +11,27 @@ package org.kata.store.domain;
  */
 public class User {
 
-    public String name;
-    public String surname;
+    private String name;
+    private String surname;
 
     public User(String name, String surname) {
+        this.setName(name);
+        this.setSurname(surname);
+    }
+
+    private void setName(String name) {
         this.name = name;
+    }
+
+    private void setSurname(String surname) {
         this.surname = surname;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getSurname() {
+        return surname;
     }
 }
