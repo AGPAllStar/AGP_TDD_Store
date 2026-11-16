@@ -1,6 +1,8 @@
 package org.kata.store.domain;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -36,11 +38,29 @@ class UserTest {
 
         try {
             // Act
-            user = new User(null, "Apellidos");;
+            user = new User(null, "Apellidos");
             fail("Should have thrown an IllegalArgumentException");
         }catch(IllegalArgumentException e) {
             // Assert
             assertEquals("Name cannot be null", e.getMessage());
+        }
+
+        assertNull(user);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"", "\n", "\t", "\r", " \n\t\r"})
+    void shouldNotCreateUserWithNameEmpty(String newName) {
+        // Arrange
+        User user = null;
+
+        try {
+            // Act
+            user = new User(newName, "Apellidos");
+            fail("Should have thrown an IllegalArgumentException");
+        }catch(IllegalArgumentException e) {
+            // Assert
+            assertEquals("Name cannot be empty", e.getMessage());
         }
 
         assertNull(user);
