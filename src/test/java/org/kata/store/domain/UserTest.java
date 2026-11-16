@@ -102,7 +102,7 @@ class UserTest {
     }
 
     @ParameterizedTest
-    @ValueSource(longs = {1L, 32L, 1000L, 100000000000L})
+    @ValueSource(longs = {1L, 32L, 1000L, Long.MAX_VALUE})
     void shouldCreateUserWithPositiveId(long newId) {
         // Arrange
         User user = null;
@@ -112,5 +112,21 @@ class UserTest {
 
         // Assert
         assertEquals(newId, user.getId());
+    }
+
+    @ParameterizedTest
+    @ValueSource(longs = {0L, -1L, -32L, -1000L, Long.MIN_VALUE})
+    void shouldNotCreateUserWithZeroOrNegativeId(long newId) {
+        // Arrange
+        User user = null;
+
+        try {
+            // Act
+            user = new User(newId, "Nombre", "Apellidos");
+            fail("Should have thrown an IllegalArgumentException");
+        }catch(IllegalArgumentException e) {
+            // Assert
+            assertEquals("Id cannot be zero or negative", e.getMessage());
+        }
     }
 }
