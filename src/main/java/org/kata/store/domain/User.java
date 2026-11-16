@@ -29,6 +29,9 @@ public class User {
     }
 
     private void setSurname(String surname) {
+        if (surname == null) {
+            throw new IllegalArgumentException("Surname cannot be null");
+        }
         this.surname = surname;
     }
 
