@@ -16,6 +16,9 @@ public class User {
     private String surname;
 
     public User(long id, String name, String surname) {
+        if(id <= 0){
+            throw new IllegalArgumentException("Id cannot be zero or negative");
+        }
         this.id = id;
         this.setName(name);
         this.setSurname(surname);
