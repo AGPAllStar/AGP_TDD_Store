@@ -82,4 +82,22 @@ class UserTest {
 
         assertNull(user);
     }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"", " ", "\n", "\t", "\r", " \n\t\r"})
+    void shouldNotCreateUserWithSurnameEmpty(String newSurname) {
+        // Arrange
+        User user = null;
+
+        try {
+            // Act
+            user = new User("Nombre", newSurname);
+            fail("Should have thrown an IllegalArgumentException");
+        }catch(IllegalArgumentException e) {
+            // Assert
+            assertEquals("Surname cannot be empty", e.getMessage());
+        }
+
+        assertNull(user);
+    }
 }
