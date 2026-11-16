@@ -100,4 +100,17 @@ class UserTest {
 
         assertNull(user);
     }
+
+    @ParameterizedTest
+    @ValueSource(longs = {1L, 32L, 1000L, 100000000000L})
+    void shouldCreateUserWithId(long newId) {
+        // Arrange
+        User user = null;
+
+        // Act
+        user = new User(newId, "Nombre", "Apellidos");
+
+        // Assert
+        assertEquals(newId, user.id);
+    }
 }
