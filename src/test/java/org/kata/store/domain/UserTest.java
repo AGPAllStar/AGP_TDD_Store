@@ -41,7 +41,7 @@ class UserTest {
             fail("Should have thrown an IllegalArgumentException");
         }catch(IllegalArgumentException e) {
             // Assert
-            assertEquals("The name cannot be null", e.getMessage());
+            assertEquals("Name cannot be null", e.getMessage());
         }
     }
 }
