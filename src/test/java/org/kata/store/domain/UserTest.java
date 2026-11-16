@@ -2,8 +2,7 @@ package org.kata.store.domain;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 
 /*
  * TODO: Tests unitarios de User.
@@ -33,7 +32,7 @@ class UserTest {
     @Test
     void shouldNotCreateUserWithNameNull() {
         // Arrange
-        User user;
+        User user = null;
 
         try {
             // Act
@@ -43,5 +42,7 @@ class UserTest {
             // Assert
             assertEquals("Name cannot be null", e.getMessage());
         }
+
+        assertNull(user);
     }
 }
