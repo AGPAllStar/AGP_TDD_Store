@@ -30,7 +30,7 @@ class OrderTest {
     @Test
     void shouldStartInDraftStatus() {
         // Act
-        order = new Order(1.0f);
+        order = new Order();
 
         // Assert
         assertEquals(OrderStatus.DRAFT, order.getStatus());
@@ -41,14 +41,14 @@ class OrderTest {
         // Assert
         assertThrows(NullPointerException.class, () -> {
             // Act
-            new Order(null, 1.0f);
+            new Order(null);
         });
     }
 
     @Test
     void shouldChangeFromDraftToProcessedStatus() {
         // Arrange
-        order = new Order(OrderStatus.DRAFT, 1.0f);
+        order = new Order(OrderStatus.DRAFT);
 
         // Act
         order.processOrder();
@@ -60,7 +60,7 @@ class OrderTest {
     @Test
     void shouldNotChangeFromProcessedToProcessedStatus() {
         // Arrange
-        order = new Order(OrderStatus.PROCESSED, 1.0f);
+        order = new Order(OrderStatus.PROCESSED);
 
         try {
             // Act
@@ -78,7 +78,7 @@ class OrderTest {
     @Test
     void shouldChangeFromProcessedToDispatchedStatus() {
         // Arrange
-        order = new Order(OrderStatus.PROCESSED, 1.0f);
+        order = new Order(OrderStatus.PROCESSED);
 
         // Act
         order.dispatchOrder();
@@ -90,7 +90,7 @@ class OrderTest {
     @Test
     void shouldNotChangeFromDraftToDispatchedStatus() {
         // Arrange
-        order = new Order(OrderStatus.DRAFT, 1.0f);
+        order = new Order(OrderStatus.DRAFT);
 
         try {
             // Act
@@ -108,7 +108,7 @@ class OrderTest {
     @Test
     void shouldNotChangeFromDispatchedToProcessedStatus() {
         // Arrange
-        order = new Order(OrderStatus.DISPATCHED, 1.0f);
+        order = new Order(OrderStatus.DISPATCHED);
 
         try {
             // Act
@@ -126,7 +126,7 @@ class OrderTest {
     @Test
     void shouldNotChangeFromDispatchedToDispatchedStatus() {
         // Arrange
-        order = new Order(OrderStatus.DISPATCHED, 1.0f);
+        order = new Order(OrderStatus.DISPATCHED);
 
         try {
             // Act
@@ -144,7 +144,7 @@ class OrderTest {
     @Test
     void shouldChangeFromDispatchedToDeliveredStatus() {
         // Arrange
-        order = new Order(OrderStatus.DISPATCHED, 1.0f);
+        order = new Order(OrderStatus.DISPATCHED);
 
         // Act
         order.deliverOrder();
@@ -156,7 +156,7 @@ class OrderTest {
     @Test
     void shouldNotChangeFromDraftToDeliveredStatus() {
         // Arrange
-        order = new Order(OrderStatus.DRAFT, 1.0f);
+        order = new Order(OrderStatus.DRAFT);
 
         try {
             // Act
@@ -174,7 +174,7 @@ class OrderTest {
     @Test
     void shouldNotChangeFromProcessedToDeliveredStatus() {
         // Arrange
-        order = new Order(OrderStatus.PROCESSED, 1.0f);
+        order = new Order(OrderStatus.PROCESSED);
 
         try {
             // Act
@@ -192,7 +192,7 @@ class OrderTest {
     @Test
     void shouldNotChangeFromDeliveredToDeliveredStatus() {
         // Arrange
-        order = new Order(OrderStatus.DELIVERED, 1.0f);
+        order = new Order(OrderStatus.DELIVERED);
 
         try {
             // Act
@@ -210,7 +210,7 @@ class OrderTest {
     @Test
     void shouldNotChangeFromDeliveredToProcessedStatus() {
         // Arrange
-        order = new Order(OrderStatus.DELIVERED, 1.0f);
+        order = new Order(OrderStatus.DELIVERED);
 
         try {
             // Act
@@ -228,7 +228,7 @@ class OrderTest {
     @Test
     void shouldNotChangeFromDeliveredToDispatchedStatus() {
         // Arrange
-        order = new Order(OrderStatus.DELIVERED, 1.0f);
+        order = new Order(OrderStatus.DELIVERED);
 
         try {
             // Act

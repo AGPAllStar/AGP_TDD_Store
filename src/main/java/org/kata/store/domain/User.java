@@ -22,14 +22,9 @@ public class User {
     }
 
     public User(String name, String surname) {
-        this.setId(1L);
-        this.setName(name);
-        this.setSurname(surname);
+        this(1L, name, surname);
     }
 
-    /*
-        Constructor made only for tests
-     */
     public User() {
         this.id = 1L;
         this.name = "Name";

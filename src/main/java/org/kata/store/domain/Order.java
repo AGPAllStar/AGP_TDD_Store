@@ -19,16 +19,27 @@ public class Order {
 
     public Order(OrderStatus status, float price)
     {
-        if(status == null){
-            throw new NullPointerException("status cannot be null");
-        }
+        checkStatusIsNotNull(status);
         this.status = status;
         this.setPrice(price);
     }
 
+    public Order(OrderStatus status)
+    {
+        checkStatusIsNotNull(status);
+        this.status = status;
+        this.price = 1.0f;
+    }
+
     public Order(float price)
     {
-        this(OrderStatus.DRAFT, price);
+        this.status = OrderStatus.DRAFT;
+        this.setPrice(price);
+    }
+
+    public Order() {
+        this.status = OrderStatus.DRAFT;
+        this.price = 1.0f;
     }
 
     public OrderStatus getStatus()
@@ -38,6 +49,7 @@ public class Order {
 
     private void setStatus(OrderStatus status)
     {
+        checkStatusIsNotNull(status);
         if(status == this.status) {
             throw new IllegalStateException("The order is already " + getStatusToString(status));
         }else if(status.ordinal() != this.status.ordinal() + 1) {
@@ -46,13 +58,18 @@ public class Order {
         this.status = status;
     }
 
+    private void checkStatusIsNotNull(OrderStatus status){
+        if(status == null){
+            throw new NullPointerException("Status cannot be null");
+        }
+    }
+
     private String getStatusToString(OrderStatus status) {
         return switch (status) {
             case OrderStatus.DRAFT -> "draft";
             case OrderStatus.PROCESSED -> "processed";
             case OrderStatus.DISPATCHED -> "dispatched";
             case OrderStatus.DELIVERED -> "delivered";
-            default -> "unknown";
         };
     }
 
