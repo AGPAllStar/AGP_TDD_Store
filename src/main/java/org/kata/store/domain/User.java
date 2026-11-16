@@ -20,21 +20,21 @@ public class User {
     }
 
     private void setName(String name) {
-        if (name == null) {
-            throw new IllegalArgumentException("Name cannot be null");
-        }else if (name.trim().isEmpty()) {
-            throw new IllegalArgumentException("Name cannot be empty");
-        }
+        checkStringIsNotNullOrEmpty(name, "Name");
         this.name = name;
     }
 
     private void setSurname(String surname) {
-        if (surname == null) {
-            throw new IllegalArgumentException("Surname cannot be null");
-        }else if (surname.trim().isEmpty()) {
-            throw new IllegalArgumentException("Surname cannot be empty");
-        }
+        checkStringIsNotNullOrEmpty(surname, "Surname");
         this.surname = surname;
+    }
+
+    private void checkStringIsNotNullOrEmpty(String strToCheck, String strNameForErrMsg){
+        if (strToCheck == null) {
+            throw new IllegalArgumentException(strNameForErrMsg + " cannot be null");
+        }else if (strToCheck.trim().isEmpty()) {
+            throw new IllegalArgumentException(strNameForErrMsg + " cannot be empty");
+        }
     }
 
     public String getName() {
