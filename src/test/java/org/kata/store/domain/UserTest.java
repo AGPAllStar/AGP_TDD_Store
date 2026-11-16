@@ -49,7 +49,7 @@ class UserTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"", "\n", "\t", "\r", " \n\t\r"})
+    @ValueSource(strings = {"", " ", "\n", "\t", "\r", " \n\t\r"})
     void shouldNotCreateUserWithNameEmpty(String newName) {
         // Arrange
         User user = null;
