@@ -11,8 +11,15 @@ package org.kata.store.domain;
  */
 public class User {
 
+    public long id;
     private String name;
     private String surname;
+
+    public User(long id, String name, String surname) {
+        this.id = id;
+        this.setName(name);
+        this.setSurname(surname);
+    }
 
     public User(String name, String surname) {
         this.setName(name);

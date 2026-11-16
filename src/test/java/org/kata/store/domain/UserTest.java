@@ -103,7 +103,7 @@ class UserTest {
 
     @ParameterizedTest
     @ValueSource(longs = {1L, 32L, 1000L, 100000000000L})
-    void shouldCreateUserWithId(long newId) {
+    void shouldCreateUserWithPositiveId(long newId) {
         // Arrange
         User user = null;
 
