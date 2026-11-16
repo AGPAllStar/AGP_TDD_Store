@@ -11,7 +11,7 @@ package org.kata.store.domain;
  */
 public class User {
 
-    public long id;
+    private long id;
     private String name;
     private String surname;
 
@@ -42,6 +42,10 @@ public class User {
         }else if (strToCheck.trim().isEmpty()) {
             throw new IllegalArgumentException(strNameForErrMsg + " cannot be empty");
         }
+    }
+
+    public long getId() {
+        return id;
     }
 
     public String getName() {

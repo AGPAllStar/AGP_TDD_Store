@@ -111,6 +111,6 @@ class UserTest {
         user = new User(newId, "Nombre", "Apellidos");
 
         // Assert
-        assertEquals(newId, user.id);
+        assertEquals(newId, user.getId());
     }
 }
