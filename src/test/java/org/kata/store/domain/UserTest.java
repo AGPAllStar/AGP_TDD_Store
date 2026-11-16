@@ -21,10 +21,11 @@ class UserTest {
     @Test
     void shouldCreateUserWithNameAndSurname() {
         // Arrange
-        User user;
+        User user = new User();
 
         // Act
-        user = new User("Nombre", "Apellidos");
+        user.setName("Nombre");
+        user.setSurname("Apellidos");
 
         // Assert
         assertEquals("Nombre", user.getName());
@@ -34,81 +35,85 @@ class UserTest {
     @Test
     void shouldNotCreateUserWithNameNull() {
         // Arrange
-        User user = null;
+        User user = new User();
 
         try {
             // Act
-            user = new User(null, "Apellidos");
+            user.setName(null);
             fail("Should have thrown an IllegalArgumentException");
         }catch(IllegalArgumentException e) {
             // Assert
             assertEquals("Name cannot be null", e.getMessage());
         }
 
-        assertNull(user);
+        // Assert
+        assertNotNull(user.getName());
     }
 
     @ParameterizedTest
     @ValueSource(strings = {"", " ", "\n", "\t", "\r", " \n\t\r"})
     void shouldNotCreateUserWithNameEmpty(String newName) {
         // Arrange
-        User user = null;
+        User user = new User();
 
         try {
             // Act
-            user = new User(newName, "Apellidos");
+            user.setName(newName);
             fail("Should have thrown an IllegalArgumentException");
         }catch(IllegalArgumentException e) {
             // Assert
             assertEquals("Name cannot be empty", e.getMessage());
         }
 
-        assertNull(user);
+        // Assert
+        assertFalse(user.getName().trim().isEmpty());
     }
 
     @Test
     void shouldNotCreateUserWithSurnameNull() {
         // Arrange
-        User user = null;
+        User user = new User();
 
         try {
             // Act
-            user = new User("Nombre", null);
+            user.setSurname(null);
             fail("Should have thrown an IllegalArgumentException");
         }catch(IllegalArgumentException e) {
             // Assert
             assertEquals("Surname cannot be null", e.getMessage());
         }
 
-        assertNull(user);
+        // Assert
+        assertNotNull(user.getSurname());
     }
 
     @ParameterizedTest
     @ValueSource(strings = {"", " ", "\n", "\t", "\r", " \n\t\r"})
     void shouldNotCreateUserWithSurnameEmpty(String newSurname) {
         // Arrange
-        User user = null;
+        User user = new User();
 
         try {
             // Act
-            user = new User("Nombre", newSurname);
+            user.setSurname(newSurname);
             fail("Should have thrown an IllegalArgumentException");
         }catch(IllegalArgumentException e) {
             // Assert
             assertEquals("Surname cannot be empty", e.getMessage());
         }
 
-        assertNull(user);
+        // Assert
+        assertFalse(user.getSurname().trim().isEmpty());
     }
 
     @ParameterizedTest
     @ValueSource(longs = {1L, 32L, 1000L, Long.MAX_VALUE})
     void shouldCreateUserWithPositiveId(long newId) {
         // Arrange
-        User user = null;
+        User user = new User();
 
         // Act
-        user = new User(newId, "Nombre", "Apellidos");
+        user.setId(newId);
 
         // Assert
         assertEquals(newId, user.getId());
@@ -118,15 +123,17 @@ class UserTest {
     @ValueSource(longs = {0L, -1L, -32L, -1000L, Long.MIN_VALUE})
     void shouldNotCreateUserWithZeroOrNegativeId(long newId) {
         // Arrange
-        User user = null;
+        User user = new User();
 
         try {
             // Act
-            user = new User(newId, "Nombre", "Apellidos");
+            user.setId(newId);
             fail("Should have thrown an IllegalArgumentException");
         }catch(IllegalArgumentException e) {
             // Assert
             assertEquals("Id cannot be zero or negative", e.getMessage());
         }
+
+        assertNotEquals(newId, user.getId());
     }
 }

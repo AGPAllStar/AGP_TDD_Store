@@ -16,25 +16,39 @@ public class User {
     private String surname;
 
     public User(long id, String name, String surname) {
-        if(id <= 0){
-            throw new IllegalArgumentException("Id cannot be zero or negative");
-        }
-        this.id = id;
+        this.setId(id);
         this.setName(name);
         this.setSurname(surname);
     }
 
     public User(String name, String surname) {
+        this.setId(1L);
         this.setName(name);
         this.setSurname(surname);
     }
 
-    private void setName(String name) {
+    /*
+        Constructor made only for tests
+     */
+    public User() {
+        this.id = 1L;
+        this.name = "Name";
+        this.surname = "Surname";
+    }
+
+    public void setId(long id) {
+        if(id <= 0){
+            throw new IllegalArgumentException("Id cannot be zero or negative");
+        }
+        this.id = id;
+    }
+
+    public void setName(String name) {
         checkStringIsNotNullOrEmpty(name, "Name");
         this.name = name;
     }
 
-    private void setSurname(String surname) {
+    public void setSurname(String surname) {
         checkStringIsNotNullOrEmpty(surname, "Surname");
         this.surname = surname;
     }
