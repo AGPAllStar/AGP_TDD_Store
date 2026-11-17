@@ -128,4 +128,23 @@ class OrderServiceTest {
         assertEquals(OrderStatus.DISPATCHED, result.getStatus());
         verify(orderRepository).save(order);
     }
+
+    @Test
+    void shouldDeliverOrderInDispatchedState() {
+        // Arrange
+        userService = new UserService(userRepository);
+        orderService = new OrderService(orderRepository, userService);
+        Order order = new Order(OrderStatus.DISPATCHED);
+        order.setId(1L);
+        order.setUserId(1L);
+        when(orderRepository.findById(order.getId())).thenReturn(order);
+        when(orderRepository.save(order)).thenReturn(order);
+
+        // Act
+        Order result = orderService.deliverOrder(order.getId());
+
+        // Assert
+        assertEquals(OrderStatus.DELIVERED, result.getStatus());
+        verify(orderRepository).save(order);
+    }
 }
