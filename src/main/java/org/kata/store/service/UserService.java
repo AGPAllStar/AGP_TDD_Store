@@ -22,12 +22,8 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public Optional<User> findById(Long id) {
-        return userRepository.findById(id);
-    }
-
     public User registerUser(User user) {
-        if(this.findById(user.getId()).isPresent()) {
+        if(userRepository.findById(user.getId()).isPresent()) {
             throw new RuntimeException("User with same id already exists");
         }
         return userRepository.save(user);

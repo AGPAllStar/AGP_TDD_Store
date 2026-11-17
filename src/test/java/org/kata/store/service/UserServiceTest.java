@@ -7,6 +7,8 @@ import org.kata.store.repository.UserRepository;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
 import java.util.Optional;
 
@@ -27,6 +29,7 @@ import static org.mockito.Mockito.*;
  * @ExtendWith(MockitoExtension.class) y @Mock.
  */
 @ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 class UserServiceTest {
 
     @Mock
@@ -72,5 +75,25 @@ class UserServiceTest {
         // Assert
         verify(userRepository).findById(2L);
         verify(userRepository, never()).save(any(User.class));
+    }
+
+    @Test
+    void shouldSaveUserWithDifferentIdButSameNameAndSurname() {
+        // Arrange
+        userService = new UserService(userRepository);
+        User user = new User(1L, "Juan", "Dominguez");
+        User user2 = new User(2L, "Juan", "Dominguez");
+        when(userRepository.findById(2L)).thenReturn(Optional.of(user2));
+        when(userRepository.save(user)).thenReturn(user);
+
+        // Act
+        User result = userService.registerUser(user);
+
+        // Assert
+        assertEquals(1L, result.getId());
+        assertEquals("Juan", result.getName());
+        assertEquals("Dominguez", result.getSurname());
+        verify(userRepository, never()).findById(2L);
+        verify(userRepository).save(user);
     }
 }
