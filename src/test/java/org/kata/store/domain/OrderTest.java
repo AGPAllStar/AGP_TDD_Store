@@ -280,4 +280,23 @@ class OrderTest {
         // Assert
         assertEquals(newUserId, order.getUserId());
     }
+
+    @ParameterizedTest
+    @ValueSource(longs = {-1L, -3L, Long.MIN_VALUE})
+    void shouldRejectUserIdLowerOrEqualThanZero(long newUserId) {
+        // Arrange
+        Order order = new Order();
+
+        try {
+            // Act
+            order.setUserId(newUserId);
+            fail("Should have thrown an IllegalArgumentException");
+        }catch(IllegalArgumentException e) {
+            // Assert
+            assertEquals("User Id must be greater than zero", e.getMessage());
+        }
+
+        // Assert
+        assertNotEquals(newUserId, order.getUserId());
+    }
 }
