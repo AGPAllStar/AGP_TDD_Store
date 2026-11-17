@@ -90,4 +90,24 @@ class OrderServiceTest {
         verify(userRepository).findById(1L);
         verify(orderRepository, never()).save(order);
     }
+
+    @Test
+    void shouldProcessOrderInDraftState() {
+        // Arrange
+        userService = new UserService(userRepository);
+        orderService = new OrderService(orderRepository, userService);
+        Order order = new Order(1.0f);
+        User user = new User(2L, "Juan", "Dominguez");
+        order.setUserId(user.getId());
+        order.id = 1L;
+        when(orderRepository.findById(1L).thenReturn(order));
+        when(orderRepository.processOrder(1L)).thenReturn(order);
+
+        // Act
+        Order result = orderService.processOrder(order);
+
+        // Assert
+        assertEquals(OrderStatus.PROCESSED, result.getStatus());
+        verify(orderRepository).processOrder(order);
+    }
 }
