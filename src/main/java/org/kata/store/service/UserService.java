@@ -3,6 +3,8 @@ package org.kata.store.service;
 import org.kata.store.domain.User;
 import org.kata.store.repository.UserRepository;
 
+import java.util.Optional;
+
 /*
  * TODO: Alta de usuarios.
  *
@@ -14,17 +16,18 @@ import org.kata.store.repository.UserRepository;
  */
 public class UserService {
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
-    public User findById(Long id) {
+    public Optional<User> findById(Long id) {
         return userRepository.findById(id);
     }
 
     public User registerUser(User user) {
+        this.findById(user.getId());
         return userRepository.save(user);
     }
 }

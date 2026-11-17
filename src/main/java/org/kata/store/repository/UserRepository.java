@@ -2,6 +2,8 @@ package org.kata.store.repository;
 
 import org.kata.store.domain.User;
 
+import java.util.Optional;
+
 /*
  * TODO: Almacén de usuarios.
  *
@@ -14,7 +16,7 @@ import org.kata.store.domain.User;
  */
 public interface UserRepository {
 
-    public User findById(Long id);
+    Optional<User> findById(Long id);
 
-    public User save(User user);
+    User save(User user);
 }

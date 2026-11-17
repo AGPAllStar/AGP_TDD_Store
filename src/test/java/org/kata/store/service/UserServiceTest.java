@@ -41,7 +41,7 @@ class UserServiceTest {
         // Arrange
         userService = new UserService(userRepository);
         User user = new User(2L, "Juan", "Dominguez");
-        //when(userRepository.findById(2L)).thenReturn(null);
+        when(userRepository.findById(2L)).thenReturn(Optional.empty());
         when(userRepository.save(user)).thenReturn(user);
 
         // Act
