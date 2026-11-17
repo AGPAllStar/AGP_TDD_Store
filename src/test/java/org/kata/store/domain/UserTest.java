@@ -18,10 +18,13 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class UserTest {
 
+    // Arrange
+    private User user;
+
     @Test
     void shouldCreateUserWithNameAndSurname() {
         // Arrange
-        User user = new User();
+        user = new User();
 
         // Act
         user.setName("Nombre");
@@ -35,7 +38,7 @@ class UserTest {
     @Test
     void shouldNotCreateUserWithNameNull() {
         // Arrange
-        User user = new User();
+        user = new User();
 
         try {
             // Act
@@ -54,7 +57,7 @@ class UserTest {
     @ValueSource(strings = {"", " ", "\n", "\t", "\r", " \n\t\r"})
     void shouldNotCreateUserWithNameEmpty(String newName) {
         // Arrange
-        User user = new User();
+        user = new User();
 
         try {
             // Act
@@ -72,7 +75,7 @@ class UserTest {
     @Test
     void shouldNotCreateUserWithSurnameNull() {
         // Arrange
-        User user = new User();
+        user = new User();
 
         try {
             // Act
@@ -91,7 +94,7 @@ class UserTest {
     @ValueSource(strings = {"", " ", "\n", "\t", "\r", " \n\t\r"})
     void shouldNotCreateUserWithSurnameEmpty(String newSurname) {
         // Arrange
-        User user = new User();
+        user = new User();
 
         try {
             // Act
@@ -110,7 +113,7 @@ class UserTest {
     @ValueSource(longs = {1L, 32L, 1000L, Long.MAX_VALUE})
     void shouldCreateUserWithPositiveId(long newId) {
         // Arrange
-        User user = new User();
+        user = new User();
 
         // Act
         user.setId(newId);
@@ -123,7 +126,7 @@ class UserTest {
     @ValueSource(longs = {0L, -1L, -32L, -1000L, Long.MIN_VALUE})
     void shouldNotCreateUserWithZeroOrNegativeId(long newId) {
         // Arrange
-        User user = new User();
+        user = new User();
 
         try {
             // Act

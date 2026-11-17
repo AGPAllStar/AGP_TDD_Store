@@ -1,5 +1,17 @@
 package org.kata.store.service;
 
+import org.junit.jupiter.api.Test;
+import org.kata.store.domain.User;
+import org.kata.store.repository.UserRepository;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 /*
  * TODO: Tests unitarios de UserService con Mockito.
  *
@@ -14,4 +26,28 @@ package org.kata.store.service;
  * @ExtendWith(MockitoExtension.class) y @Mock.
  */
 class UserServiceTest {
+
+    @Mock
+    private UserRepository userRepository;
+
+    @InjectMocks
+    private UserService userService;
+
+    @Test
+    void shouldSaveNewUser() {
+        // Arrange
+        userService = new UserService(userRepository);
+        User user = new User(2L, "Juan", "Dominguez");
+        when(userRepository.findById(2L)).thenReturn(Optional.empty());
+        when(userRepository.save(user)).thenReturn(user);
+
+        // Act
+        User result = userService.registerUser(user);
+
+        // Assert
+        assertEquals(2L, result.getId());
+        assertEquals("Juan", result.getName());
+        assertEquals("Dominguez", result.getSurname());
+        verify(userRepository).save(user);
+    }
 }
