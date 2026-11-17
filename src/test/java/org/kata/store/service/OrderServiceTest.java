@@ -74,6 +74,7 @@ class OrderServiceTest {
         userService = new UserService(userRepository);
         orderService = new OrderService(orderRepository, userService);
         Order order = new Order(1.0f);
+        order.setUserId(1L);
         when(userRepository.findById(1L)).thenReturn(Optional.empty());
 
         try {

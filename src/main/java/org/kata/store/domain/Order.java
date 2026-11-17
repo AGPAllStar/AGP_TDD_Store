@@ -16,6 +16,7 @@ package org.kata.store.domain;
 public class Order {
     private OrderStatus status;
     private float price;
+    public long userId;
 
     public Order(OrderStatus status, float price)
     {
@@ -94,5 +95,9 @@ public class Order {
 
     public float getPrice() {
         return price;
+    }
+
+    public void setUserId(long userId) {
+        this.userId = userId;
     }
 }
