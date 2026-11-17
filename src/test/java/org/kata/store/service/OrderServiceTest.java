@@ -14,8 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 /*
  * TODO: Tests unitarios de OrderService con Mockito.
@@ -38,6 +37,12 @@ import static org.mockito.Mockito.when;
 class OrderServiceTest {
 
     @Mock
+    private UserRepository userRepository;
+
+    @InjectMocks
+    private UserService userService;
+
+    @Mock
     private OrderRepository orderRepository;
 
     @InjectMocks
@@ -46,8 +51,12 @@ class OrderServiceTest {
     @Test
     void shouldCreateOrderInDraftForExistingUser() {
         // Arrange
-        orderService = new OrderService(orderRepository);
+        userService = new UserService(userRepository);
+        orderService = new OrderService(orderRepository, userService);
         Order order = new Order(1.0f);
+        User user = new User(2L, "Juan", "Dominguez");
+        order.userId = user.getId();
+        when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
         when(orderRepository.save(order)).thenReturn(order);
 
         // Act
@@ -57,5 +66,26 @@ class OrderServiceTest {
         assertEquals(OrderStatus.DRAFT, result.getStatus());
         assertEquals(1.0f, result.getPrice());
         verify(orderRepository).save(order);
+    }
+
+    @Test
+    void shouldNotCreateOrderForNotExistingUser() {
+        // Arrange
+        userService = new UserService(userRepository);
+        orderService = new OrderService(orderRepository, userService);
+        Order order = new Order(1.0f);
+        when(userRepository.findById(1L)).thenReturn(Optional.empty());
+
+        try {
+            // Act
+            orderService.createOrder(order);
+        }catch (RuntimeException e){
+            // Assert
+            assertEquals("It doesn't exist user with given id", e.getMessage());
+        }
+
+        // Assert
+        verify(userRepository).findById(1L);
+        verify(orderRepository, never()).save(order);
     }
 }
