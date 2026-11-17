@@ -39,4 +39,10 @@ public class OrderService {
         order.processOrder();
         return orderRepository.save(order);
     }
+
+    public Order dispatchOrder(long orderId) {
+        Order order = orderRepository.findById(orderId);
+        order.dispatchOrder();
+        return orderRepository.save(order);
+    }
 }
