@@ -1,10 +1,12 @@
 package org.kata.store.service;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.kata.store.domain.User;
 import org.kata.store.repository.UserRepository;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
@@ -25,6 +27,7 @@ import static org.mockito.Mockito.when;
  * Pista: puedes crear los mocks con mock(UserRepository.class) o con
  * @ExtendWith(MockitoExtension.class) y @Mock.
  */
+@ExtendWith(MockitoExtension.class)
 class UserServiceTest {
 
     @Mock
@@ -38,7 +41,7 @@ class UserServiceTest {
         // Arrange
         userService = new UserService(userRepository);
         User user = new User(2L, "Juan", "Dominguez");
-        when(userRepository.findById(2L)).thenReturn(Optional.empty());
+        //when(userRepository.findById(2L)).thenReturn(null);
         when(userRepository.save(user)).thenReturn(user);
 
         // Act
