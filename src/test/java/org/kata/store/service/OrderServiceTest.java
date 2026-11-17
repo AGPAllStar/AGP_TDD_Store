@@ -1,6 +1,7 @@
 package org.kata.store.service;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.kata.store.domain.Order;
 import org.kata.store.domain.OrderStatus;
 import org.kata.store.domain.User;
@@ -8,6 +9,7 @@ import org.kata.store.repository.OrderRepository;
 import org.kata.store.repository.UserRepository;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
@@ -32,13 +34,8 @@ import static org.mockito.Mockito.when;
  *   - Stub: la dependencia devuelve un valor fijo y compruebas el resultado (estado).
  *   - Mock: compruebas con verify que el servicio llamó a la dependencia (comportamiento).
  */
+@ExtendWith(MockitoExtension.class)
 class OrderServiceTest {
-
-    @Mock
-    private UserRepository userRepository;
-
-    @InjectMocks
-    private UserService userService;
 
     @Mock
     private OrderRepository orderRepository;
@@ -49,10 +46,8 @@ class OrderServiceTest {
     @Test
     void shouldCreateOrderInDraftForExistingUser() {
         // Arrange
-        userService = new UserService(userRepository);
-        orderService = new OrderService(orderRepository, userService);
+        orderService = new OrderService(orderRepository);
         Order order = new Order(1.0f);
-        User user = new User(2L, "Juan", "Dominguez");
         when(orderRepository.save(order)).thenReturn(order);
 
         // Act
@@ -61,6 +56,6 @@ class OrderServiceTest {
         // Assert
         assertEquals(OrderStatus.DRAFT, result.getStatus());
         assertEquals(1.0f, result.getPrice());
-        verify(orderRepository).save(user);
+        verify(orderRepository).save(order);
     }
 }
