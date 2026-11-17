@@ -28,7 +28,7 @@ public class OrderService {
     }
 
     public Order createOrder(Order order) {
-        if(userService.findUserById(order.userId).isEmpty()){
+        if(userService.findUserById(order.getUserId()).isEmpty()){
             throw new RuntimeException("It doesn't exist user with given id");
         }
         return orderRepository.save(order);

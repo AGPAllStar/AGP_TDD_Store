@@ -2,6 +2,8 @@ package org.kata.store.service;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.kata.store.domain.Order;
 import org.kata.store.domain.OrderStatus;
 import org.kata.store.domain.User;
@@ -55,7 +57,7 @@ class OrderServiceTest {
         orderService = new OrderService(orderRepository, userService);
         Order order = new Order(1.0f);
         User user = new User(2L, "Juan", "Dominguez");
-        order.userId = user.getId();
+        order.setUserId(user.getId());
         when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
         when(orderRepository.save(order)).thenReturn(order);
 
@@ -65,6 +67,7 @@ class OrderServiceTest {
         // Assert
         assertEquals(OrderStatus.DRAFT, result.getStatus());
         assertEquals(1.0f, result.getPrice());
+        assertEquals(2L, result.getUserId());
         verify(orderRepository).save(order);
     }
 
