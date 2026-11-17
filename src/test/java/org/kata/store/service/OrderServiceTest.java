@@ -53,7 +53,7 @@ class OrderServiceTest {
         // Arrange
         userService = new UserService(userRepository);
         orderService = new OrderService(orderRepository, userService);
-        Order order = new Order(1.0f);
+        Order order = new Order();
         User user = new User(2L, "Juan", "Dominguez");
         order.setUserId(user.getId());
         when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
@@ -74,7 +74,7 @@ class OrderServiceTest {
         // Arrange
         userService = new UserService(userRepository);
         orderService = new OrderService(orderRepository, userService);
-        Order order = new Order(1.0f);
+        Order order = new Order();
         order.setUserId(1L);
         when(userRepository.findById(1L)).thenReturn(Optional.empty());
 
@@ -96,8 +96,9 @@ class OrderServiceTest {
         // Arrange
         userService = new UserService(userRepository);
         orderService = new OrderService(orderRepository, userService);
-        Order order = new Order(1.0f);
+        Order order = new Order();
         order.setId(1L);
+        order.setUserId(1L);
         when(orderRepository.findById(order.getId())).thenReturn(order);
         when(orderRepository.save(order)).thenReturn(order);
 
@@ -106,6 +107,25 @@ class OrderServiceTest {
 
         // Assert
         assertEquals(OrderStatus.PROCESSED, result.getStatus());
+        verify(orderRepository).save(order);
+    }
+
+    @Test
+    void shouldDispatchOrderInProcessedState() {
+        // Arrange
+        userService = new UserService(userRepository);
+        orderService = new OrderService(orderRepository, userService);
+        Order order = new Order(OrderStatus.PROCESSED);
+        order.setId(1L);
+        order.setUserId(1L);
+        when(orderRepository.findById(order.getId())).thenReturn(order);
+        when(orderRepository.save(order)).thenReturn(order);
+
+        // Act
+        Order result = orderService.dispatchOrder(order.getId());
+
+        // Assert
+        assertEquals(OrderStatus.DISPATCHED, result.getStatus());
         verify(orderRepository).save(order);
     }
 }
