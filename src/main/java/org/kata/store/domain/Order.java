@@ -98,6 +98,9 @@ public class Order {
     }
 
     public void setUserId(long userId) {
+        if(userId <= 0) {
+            throw new IllegalArgumentException("User Id must be greater than zero");
+        }
         this.userId = userId;
     }
 
