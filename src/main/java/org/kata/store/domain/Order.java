@@ -18,29 +18,25 @@ public class Order {
     private float price;
     private long userId;
 
-    public Order(OrderStatus status, float price)
-    {
-        checkStatusIsNotNull(status);
-        this.status = status;
-        this.setPrice(price);
-    }
-
     public Order(OrderStatus status)
     {
         checkStatusIsNotNull(status);
         this.status = status;
         this.price = 1.0f;
+        this.userId = 1L;
     }
 
     public Order(float price)
     {
         this.status = OrderStatus.DRAFT;
         this.setPrice(price);
+        this.userId = 1L;
     }
 
     public Order() {
         this.status = OrderStatus.DRAFT;
         this.price = 1.0f;
+        this.userId = 1L;
     }
 
     public OrderStatus getStatus()

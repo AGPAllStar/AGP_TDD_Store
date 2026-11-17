@@ -2,8 +2,6 @@ package org.kata.store.service;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
 import org.kata.store.domain.Order;
 import org.kata.store.domain.OrderStatus;
 import org.kata.store.domain.User;
