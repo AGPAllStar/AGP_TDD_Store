@@ -45,4 +45,10 @@ public class OrderService {
         order.dispatchOrder();
         return orderRepository.save(order);
     }
+
+    public Order deliverOrder(long orderId) {
+        Order order = orderRepository.findById(orderId);
+        order.deliverOrder();
+        return orderRepository.save(order);
+    }
 }
