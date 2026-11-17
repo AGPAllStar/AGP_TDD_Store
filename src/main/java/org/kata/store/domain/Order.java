@@ -17,6 +17,7 @@ public class Order {
     private OrderStatus status;
     private float price;
     private long userId;
+    public long id;
 
     public Order(OrderStatus status)
     {
@@ -24,6 +25,7 @@ public class Order {
         this.status = status;
         this.price = 1.0f;
         this.userId = 1L;
+        this.id = 1L;
     }
 
     public Order(float price)
@@ -31,12 +33,14 @@ public class Order {
         this.status = OrderStatus.DRAFT;
         this.setPrice(price);
         this.userId = 1L;
+        this.id = 1L;
     }
 
     public Order() {
         this.status = OrderStatus.DRAFT;
         this.price = 1.0f;
         this.userId = 1L;
+        this.id = 1L;
     }
 
     public OrderStatus getStatus()
