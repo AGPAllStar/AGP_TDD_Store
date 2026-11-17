@@ -11,8 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 /*
  * TODO: Tests unitarios de UserService con Mockito.
@@ -52,5 +51,26 @@ class UserServiceTest {
         assertEquals("Juan", result.getName());
         assertEquals("Dominguez", result.getSurname());
         verify(userRepository).save(user);
+    }
+
+    @Test
+    void shouldNotSaveUserWithRepeatedId() {
+        // Arrange
+        userService = new UserService(userRepository);
+        User user = new User(2L, "Juan", "Dominguez");
+        User user2 = new User(2L, "Juanes", "Domingo");
+        when(userRepository.findById(2L)).thenReturn(Optional.of(user2));
+
+        try {
+            // Act
+            userService.registerUser(user);
+        }catch (RuntimeException e){
+            // Assert
+            assertEquals("User with same id already exists", e.getMessage());
+        }
+
+        // Assert
+        verify(userRepository).findById(2L);
+        verify(userRepository, never()).save(any(User.class));
     }
 }
