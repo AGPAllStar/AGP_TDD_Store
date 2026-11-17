@@ -3,6 +3,8 @@ package org.kata.store.service;
 import org.kata.store.domain.Order;
 import org.kata.store.repository.OrderRepository;
 
+import java.lang.reflect.InvocationTargetException;
+
 /*
  * TODO: Registro de pedidos.
  *
@@ -35,20 +37,24 @@ public class OrderService {
     }
 
     public Order processOrder(long orderId) {
-        Order order = orderRepository.findById(orderId);
-        order.processOrder();
-        return orderRepository.save(order);
+        return executeMethodForOrderById(orderId, "processOrder");
     }
 
     public Order dispatchOrder(long orderId) {
-        Order order = orderRepository.findById(orderId);
-        order.dispatchOrder();
-        return orderRepository.save(order);
+        return executeMethodForOrderById(orderId, "dispatchOrder");
     }
 
     public Order deliverOrder(long orderId) {
+        return executeMethodForOrderById(orderId, "deliverOrder");
+    }
+
+    private Order executeMethodForOrderById(long orderId, String methodName){
         Order order = orderRepository.findById(orderId);
-        order.deliverOrder();
+        try {
+            Order.class.getMethod(methodName).invoke(order);
+        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        }
         return orderRepository.save(order);
     }
 }
