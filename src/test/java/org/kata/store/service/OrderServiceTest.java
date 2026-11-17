@@ -97,14 +97,12 @@ class OrderServiceTest {
         userService = new UserService(userRepository);
         orderService = new OrderService(orderRepository, userService);
         Order order = new Order(1.0f);
-        User user = new User(2L, "Juan", "Dominguez");
-        order.setUserId(user.getId());
-        order.id = 1L;
-        when(orderRepository.findById(order.id)).thenReturn(order);
+        order.setId(1L);
+        when(orderRepository.findById(order.getId())).thenReturn(order);
         when(orderRepository.save(order)).thenReturn(order);
 
         // Act
-        Order result = orderService.processOrder(order.id);
+        Order result = orderService.processOrder(order.getId());
 
         // Assert
         assertEquals(OrderStatus.PROCESSED, result.getStatus());

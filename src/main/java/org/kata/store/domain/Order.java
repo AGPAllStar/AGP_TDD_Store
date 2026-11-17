@@ -17,7 +17,7 @@ public class Order {
     private OrderStatus status;
     private float price;
     private long userId;
-    public long id;
+    private long id;
 
     public Order(OrderStatus status)
     {
@@ -106,5 +106,13 @@ public class Order {
 
     public long getUserId() {
         return userId;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public long getId() {
+        return id;
     }
 }
