@@ -27,7 +27,10 @@ public class UserService {
     }
 
     public User registerUser(User user) {
-        this.findById(user.getId());
+        Optional<User> possibleUser = this.findById(user.getId());
+        if(possibleUser.isPresent()) {
+            throw new RuntimeException("User with same id already exists");
+        }
         return userRepository.save(user);
     }
 }
