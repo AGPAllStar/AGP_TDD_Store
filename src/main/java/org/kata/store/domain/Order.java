@@ -109,6 +109,9 @@ public class Order {
     }
 
     public void setId(long id) {
+        if(id <= 0) {
+            throw new IllegalArgumentException("Id must be greater than zero");
+        }
         this.id = id;
     }
 
