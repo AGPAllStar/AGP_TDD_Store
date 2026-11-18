@@ -37,11 +37,9 @@ public class OrderService {
     }
 
     public Order processOrder(long orderId) {
-        try{
-            return executeMethodForOrderById(orderId, "processOrder");
-        }catch(RuntimeException e){
-            throw new IllegalStateException("The order cannot be processed");
-        }
+        Order order = orderRepository.findById(orderId);
+        order.processOrder();
+        return orderRepository.save(order);
     }
 
     public Order dispatchOrder(long orderId) {
