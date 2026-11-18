@@ -98,9 +98,7 @@ public class Order {
     }
 
     public void setUserId(long userId) {
-        if(userId <= 0) {
-            throw new IllegalArgumentException("User Id must be greater than zero");
-        }
+        checkLongIsGreaterThanZero(userId, "User Id");
         this.userId = userId;
     }
 
@@ -109,13 +107,17 @@ public class Order {
     }
 
     public void setId(long id) {
-        if(id <= 0) {
-            throw new IllegalArgumentException("Id must be greater than zero");
-        }
+        checkLongIsGreaterThanZero(id, "Id");
         this.id = id;
     }
 
     public long getId() {
         return id;
+    }
+
+    private void checkLongIsGreaterThanZero(long l, String paramName){
+        if(l <= 0) {
+            throw new IllegalArgumentException(paramName + " must be greater than zero");
+        }
     }
 }
