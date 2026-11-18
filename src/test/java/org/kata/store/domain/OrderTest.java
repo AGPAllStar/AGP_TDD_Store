@@ -299,4 +299,17 @@ class OrderTest {
         // Assert
         assertNotEquals(newUserId, order.getUserId());
     }
+
+    @ParameterizedTest
+    @ValueSource(longs = {1L, 3L, 36L, Long.MAX_VALUE})
+    void shouldAcceptOrderIdHigherThanZero(long newUserId) {
+        // Arrange
+        Order order = new Order();
+
+        // Act
+        order.setId(newUserId);
+
+        // Assert
+        assertEquals(newUserId, order.getId());
+    }
 }
