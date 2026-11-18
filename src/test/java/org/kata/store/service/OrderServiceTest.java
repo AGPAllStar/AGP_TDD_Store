@@ -14,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.*;
 
 /*
@@ -146,5 +147,28 @@ class OrderServiceTest {
         // Assert
         assertEquals(OrderStatus.DELIVERED, result.getStatus());
         verify(orderRepository).save(order);
+    }
+
+    @Test
+    void shouldNotProcessOrderInDispatchedState() {
+        // Arrange
+        userService = new UserService(userRepository);
+        orderService = new OrderService(orderRepository, userService);
+        Order order = new Order(OrderStatus.DISPATCHED);
+        order.setId(1L);
+        order.setUserId(1L);
+        when(orderRepository.findById(order.getId())).thenReturn(order);
+
+        try{
+            // Act
+            orderService.processOrder(order.getId());
+            fail("Should have thrown an IllegalStateException");
+        }catch(IllegalStateException e) {
+            // Assert
+            assertEquals("The order cannot be processed", e.getMessage());
+        }
+
+        // Assert
+        verify(orderRepository, never()).save(order);
     }
 }
