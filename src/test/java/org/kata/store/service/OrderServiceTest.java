@@ -217,4 +217,27 @@ class OrderServiceTest {
         // Assert
         verify(orderRepository, never()).save(order);
     }
+
+    @Test
+    void shouldNotDispatchOrderInDraftState() {
+        // Arrange
+        userService = new UserService(userRepository);
+        orderService = new OrderService(orderRepository, userService);
+        Order order = new Order(OrderStatus.DRAFT);
+        order.setId(1L);
+        order.setUserId(1L);
+        when(orderRepository.findById(order.getId())).thenReturn(order);
+
+        try{
+            // Act
+            orderService.dispatchOrder(order.getId());
+            fail("Should have thrown an IllegalStateException");
+        }catch(IllegalStateException e) {
+            // Assert
+            assertEquals("The order cannot be dispatched", e.getMessage());
+        }
+
+        // Assert
+        verify(orderRepository, never()).save(order);
+    }
 }
