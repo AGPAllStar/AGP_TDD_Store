@@ -49,16 +49,8 @@ public class OrderService {
     }
 
     public Order deliverOrder(long orderId) {
-        return executeMethodForOrderById(orderId, "deliverOrder");
-    }
-
-    private Order executeMethodForOrderById(long orderId, String methodName){
         Order order = orderRepository.findById(orderId);
-        try {
-            Order.class.getMethod(methodName).invoke(order);
-        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-            throw new RuntimeException(e);
-        }
+        order.deliverOrder();
         return orderRepository.save(order);
     }
 }
