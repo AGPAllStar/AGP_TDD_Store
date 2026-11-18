@@ -37,7 +37,11 @@ public class OrderService {
     }
 
     public Order processOrder(long orderId) {
-        return executeMethodForOrderById(orderId, "processOrder");
+        try{
+            return executeMethodForOrderById(orderId, "processOrder");
+        }catch(RuntimeException e){
+            throw new IllegalStateException("The order cannot be processed");
+        }
     }
 
     public Order dispatchOrder(long orderId) {
