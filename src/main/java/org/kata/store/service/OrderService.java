@@ -43,7 +43,9 @@ public class OrderService {
     }
 
     public Order dispatchOrder(long orderId) {
-        return executeMethodForOrderById(orderId, "dispatchOrder");
+        Order order = orderRepository.findById(orderId);
+        order.dispatchOrder();
+        return orderRepository.save(order);
     }
 
     public Order deliverOrder(long orderId) {
