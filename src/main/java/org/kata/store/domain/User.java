@@ -1,7 +1,7 @@
 package org.kata.store.domain;
 
 /*
- * TODO: Usuario de la tienda.
+ * Usuario de la tienda.
  *
  * Datos: id, nombre y apellidos.
  *

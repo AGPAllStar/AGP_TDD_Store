@@ -7,6 +7,7 @@ import org.kata.store.domain.OrderStatus;
 import org.kata.store.domain.User;
 import org.kata.store.repository.OrderRepository;
 import org.kata.store.repository.UserRepository;
+import org.kata.store.service.exceptions.RepeatedIdException;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -18,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.*;
 
 /*
- * TODO: Tests unitarios de OrderService con Mockito.
+ * Tests unitarios de OrderService con Mockito.
  *
  * UserRepository y OrderRepository son dependencias: se sustituyen por dobles de prueba.
  *
@@ -82,7 +83,7 @@ class OrderServiceTest {
         try {
             // Act
             orderService.createOrder(order);
-        }catch (RuntimeException e){
+        }catch (RepeatedIdException e){
             // Assert
             assertEquals("It doesn't exist user with given id", e.getMessage());
         }
@@ -152,16 +153,17 @@ class OrderServiceTest {
     @Test
     void shouldNotProcessOrderInDispatchedState() {
         // Arrange
+        long orderId = 1L;
         userService = new UserService(userRepository);
         orderService = new OrderService(orderRepository, userService);
         Order order = new Order(OrderStatus.DISPATCHED);
-        order.setId(1L);
-        order.setUserId(1L);
-        when(orderRepository.findById(order.getId())).thenReturn(order);
+        order.setId(orderId);
+        order.setUserId(orderId);
+        when(orderRepository.findById(orderId)).thenReturn(order);
 
         try{
             // Act
-            orderService.processOrder(order.getId());
+            orderService.processOrder(orderId);
             fail("Should have thrown an IllegalStateException");
         }catch(IllegalStateException e) {
             // Assert
@@ -175,16 +177,17 @@ class OrderServiceTest {
     @Test
     void shouldNotProcessOrderInProcessedState() {
         // Arrange
+        long orderId = 1L;
         userService = new UserService(userRepository);
         orderService = new OrderService(orderRepository, userService);
         Order order = new Order(OrderStatus.PROCESSED);
-        order.setId(1L);
-        order.setUserId(1L);
-        when(orderRepository.findById(order.getId())).thenReturn(order);
+        order.setId(orderId);
+        order.setUserId(orderId);
+        when(orderRepository.findById(orderId)).thenReturn(order);
 
         try{
             // Act
-            orderService.processOrder(order.getId());
+            orderService.processOrder(orderId);
             fail("Should have thrown an IllegalStateException");
         }catch(IllegalStateException e) {
             // Assert
@@ -198,16 +201,17 @@ class OrderServiceTest {
     @Test
     void shouldNotProcessOrderInDeliveredState() {
         // Arrange
+        long orderId = 1L;
         userService = new UserService(userRepository);
         orderService = new OrderService(orderRepository, userService);
         Order order = new Order(OrderStatus.DELIVERED);
-        order.setId(1L);
-        order.setUserId(1L);
-        when(orderRepository.findById(order.getId())).thenReturn(order);
+        order.setId(orderId);
+        order.setUserId(orderId);
+        when(orderRepository.findById(orderId)).thenReturn(order);
 
         try{
             // Act
-            orderService.processOrder(order.getId());
+            orderService.processOrder(orderId);
             fail("Should have thrown an IllegalStateException");
         }catch(IllegalStateException e) {
             // Assert
@@ -221,16 +225,17 @@ class OrderServiceTest {
     @Test
     void shouldNotDispatchOrderInDraftState() {
         // Arrange
+        long orderId = 1L;
         userService = new UserService(userRepository);
         orderService = new OrderService(orderRepository, userService);
         Order order = new Order(OrderStatus.DRAFT);
-        order.setId(1L);
-        order.setUserId(1L);
-        when(orderRepository.findById(order.getId())).thenReturn(order);
+        order.setId(orderId);
+        order.setUserId(orderId);
+        when(orderRepository.findById(orderId)).thenReturn(order);
 
         try{
             // Act
-            orderService.dispatchOrder(order.getId());
+            orderService.dispatchOrder(orderId);
             fail("Should have thrown an IllegalStateException");
         }catch(IllegalStateException e) {
             // Assert
@@ -244,16 +249,17 @@ class OrderServiceTest {
     @Test
     void shouldNotDispatchOrderInDispatchedState() {
         // Arrange
+        long orderId = 1L;
         userService = new UserService(userRepository);
         orderService = new OrderService(orderRepository, userService);
         Order order = new Order(OrderStatus.DISPATCHED);
-        order.setId(1L);
-        order.setUserId(1L);
-        when(orderRepository.findById(order.getId())).thenReturn(order);
+        order.setId(orderId);
+        order.setUserId(orderId);
+        when(orderRepository.findById(orderId)).thenReturn(order);
 
         try{
             // Act
-            orderService.dispatchOrder(order.getId());
+            orderService.dispatchOrder(orderId);
             fail("Should have thrown an IllegalStateException");
         }catch(IllegalStateException e) {
             // Assert
@@ -267,16 +273,17 @@ class OrderServiceTest {
     @Test
     void shouldNotDispatchOrderInDeliveredState() {
         // Arrange
+        long orderId = 1L;
         userService = new UserService(userRepository);
         orderService = new OrderService(orderRepository, userService);
         Order order = new Order(OrderStatus.DELIVERED);
-        order.setId(1L);
-        order.setUserId(1L);
-        when(orderRepository.findById(order.getId())).thenReturn(order);
+        order.setId(orderId);
+        order.setUserId(orderId);
+        when(orderRepository.findById(orderId)).thenReturn(order);
 
         try{
             // Act
-            orderService.dispatchOrder(order.getId());
+            orderService.dispatchOrder(orderId);
             fail("Should have thrown an IllegalStateException");
         }catch(IllegalStateException e) {
             // Assert
@@ -290,16 +297,17 @@ class OrderServiceTest {
     @Test
     void shouldNotDeliverOrderInDraftState() {
         // Arrange
+        long orderId = 1L;
         userService = new UserService(userRepository);
         orderService = new OrderService(orderRepository, userService);
         Order order = new Order(OrderStatus.DRAFT);
-        order.setId(1L);
-        order.setUserId(1L);
-        when(orderRepository.findById(order.getId())).thenReturn(order);
+        order.setId(orderId);
+        order.setUserId(orderId);
+        when(orderRepository.findById(orderId)).thenReturn(order);
 
         try{
             // Act
-            orderService.deliverOrder(order.getId());
+            orderService.deliverOrder(orderId);
             fail("Should have thrown an IllegalStateException");
         }catch(IllegalStateException e) {
             // Assert
@@ -313,16 +321,17 @@ class OrderServiceTest {
     @Test
     void shouldNotDeliverOrderInProcessedState() {
         // Arrange
+        long orderId = 1L;
         userService = new UserService(userRepository);
         orderService = new OrderService(orderRepository, userService);
         Order order = new Order(OrderStatus.PROCESSED);
-        order.setId(1L);
-        order.setUserId(1L);
-        when(orderRepository.findById(order.getId())).thenReturn(order);
+        order.setId(orderId);
+        order.setUserId(orderId);
+        when(orderRepository.findById(orderId)).thenReturn(order);
 
         try{
             // Act
-            orderService.deliverOrder(order.getId());
+            orderService.deliverOrder(orderId);
             fail("Should have thrown an IllegalStateException");
         }catch(IllegalStateException e) {
             // Assert
@@ -336,16 +345,17 @@ class OrderServiceTest {
     @Test
     void shouldNotDeliverOrderInDeliveredState() {
         // Arrange
+        long orderId = 1L;
         userService = new UserService(userRepository);
         orderService = new OrderService(orderRepository, userService);
         Order order = new Order(OrderStatus.DELIVERED);
-        order.setId(1L);
-        order.setUserId(1L);
-        when(orderRepository.findById(order.getId())).thenReturn(order);
+        order.setId(orderId);
+        order.setUserId(orderId);
+        when(orderRepository.findById(orderId)).thenReturn(order);
 
         try{
             // Act
-            orderService.deliverOrder(order.getId());
+            orderService.deliverOrder(orderId);
             fail("Should have thrown an IllegalStateException");
         }catch(IllegalStateException e) {
             // Assert

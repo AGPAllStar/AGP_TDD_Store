@@ -2,11 +2,12 @@ package org.kata.store.service;
 
 import org.kata.store.domain.User;
 import org.kata.store.repository.UserRepository;
+import org.kata.store.service.exceptions.RepeatedIdException;
 
 import java.util.Optional;
 
 /*
- * TODO: Alta de usuarios.
+ * Alta de usuarios.
  *
  * Requisitos (escribe primero el test de cada uno):
  *   - Se puede dar de alta un usuario con id, nombre y apellidos.
@@ -24,7 +25,7 @@ public class UserService {
 
     public User registerUser(User user) {
         if(userRepository.findById(user.getId()).isPresent()) {
-            throw new RuntimeException("User with same id already exists");
+            throw new RepeatedIdException("User with same id already exists");
         }
         return userRepository.save(user);
     }

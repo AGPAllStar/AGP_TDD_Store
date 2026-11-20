@@ -2,11 +2,12 @@ package org.kata.store.service;
 
 import org.kata.store.domain.Order;
 import org.kata.store.repository.OrderRepository;
+import org.kata.store.service.exceptions.RepeatedIdException;
 
 import java.lang.reflect.InvocationTargetException;
 
 /*
- * TODO: Registro de pedidos.
+ * Registro de pedidos.
  *
  * Requisitos (escribe primero el test de cada uno):
  *   - Crear un pedido para un usuario: queda en estado DRAFT.
@@ -31,7 +32,7 @@ public class OrderService {
 
     public Order createOrder(Order order) {
         if(userService.findUserById(order.getUserId()).isEmpty()){
-            throw new RuntimeException("It doesn't exist user with given id");
+            throw new RepeatedIdException("It doesn't exist user with given id");
         }
         return orderRepository.save(order);
     }

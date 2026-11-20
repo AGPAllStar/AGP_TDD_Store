@@ -7,7 +7,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import static org.junit.jupiter.api.Assertions.*;
 
 /*
- * TODO: Tests unitarios de User.
+ * Tests unitarios de User.
  *
  * Ideas de tests:
  *   - shouldCreateUserWithIdNameAndSurname

@@ -5,7 +5,7 @@ import org.kata.store.domain.User;
 import java.util.Optional;
 
 /*
- * TODO: Almacén de usuarios.
+ * Almacén de usuarios.
  *
  * Es una dependencia de los servicios: en los tests unitarios de los servicios NO uses una implementación
  * real, sustitúyela por un doble de prueba (mock o stub de Mockito, o un fake escrito a mano).

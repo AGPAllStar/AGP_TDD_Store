@@ -3,7 +3,7 @@ package org.kata.store.repository;
 import org.kata.store.domain.Order;
 
 /*
- * TODO: Almacén de pedidos.
+ * Almacén de pedidos.
  *
  * Igual que UserRepository: en los tests unitarios de los servicios se sustituye por un doble de prueba.
  *

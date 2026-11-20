@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.kata.store.domain.User;
 import org.kata.store.repository.UserRepository;
+import org.kata.store.service.exceptions.RepeatedIdException;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -16,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 /*
- * TODO: Tests unitarios de UserService con Mockito.
+ * Tests unitarios de UserService con Mockito.
  *
  * El UserRepository es una dependencia: aquí se sustituye por un mock, nunca por la implementación real.
  *
@@ -67,7 +68,7 @@ class UserServiceTest {
         try {
             // Act
             userService.registerUser(user);
-        }catch (RuntimeException e){
+        }catch (RepeatedIdException e){
             // Assert
             assertEquals("User with same id already exists", e.getMessage());
         }

@@ -7,7 +7,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import static org.junit.jupiter.api.Assertions.*;
 
 /*
- * TODO: Tests unitarios de Order y de su flujo de estados.
+ * Tests unitarios de Order y de su flujo de estados.
  *
  * Empieza aquí: es la parte sin dependencias, la más fácil para arrancar el ciclo Red -> Green -> Refactor.
  *
