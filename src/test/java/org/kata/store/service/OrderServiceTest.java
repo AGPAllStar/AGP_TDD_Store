@@ -408,4 +408,25 @@ class OrderServiceTest {
         // Assert
         verify(orderRepository, never()).save(any());
     }
+
+    @Test
+    void shouldNotDeliverNotExistingOrder() {
+        // Arrange
+        long orderId = 1L;
+        userService = new UserService(userRepository);
+        orderService = new OrderService(orderRepository, userService);
+        when(orderRepository.findById(orderId)).thenReturn(Optional.empty());
+
+        try{
+            // Act
+            orderService.deliverOrder(orderId);
+            fail("Should have thrown a NoSuchElementException");
+        }catch(NoSuchElementException e) {
+            // Assert
+            assertEquals("Order with given id does not exist", e.getMessage());
+        }
+
+        // Assert
+        verify(orderRepository, never()).save(any());
+    }
 }
