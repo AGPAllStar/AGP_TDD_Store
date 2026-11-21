@@ -40,32 +40,28 @@ public class OrderService {
     }
 
     public Order processOrder(long orderId) {
-        Optional<Order> possibleOrder = orderRepository.findById(orderId);
-        if(possibleOrder.isEmpty()){
-            throw new NoSuchElementException("Order with given id does not exist");
-        }
-        Order order = possibleOrder.get();
+        Order order = getOrderIfExists(orderId);
         order.processOrder();
         return orderRepository.save(order);
     }
 
     public Order dispatchOrder(long orderId) {
-        Optional<Order> possibleOrder = orderRepository.findById(orderId);
-        if(possibleOrder.isEmpty()){
-            throw new NoSuchElementException("Order with given id does not exist");
-        }
-        Order order = possibleOrder.get();
+        Order order = getOrderIfExists(orderId);
         order.dispatchOrder();
         return orderRepository.save(order);
     }
 
     public Order deliverOrder(long orderId) {
+        Order order = getOrderIfExists(orderId);
+        order.deliverOrder();
+        return orderRepository.save(order);
+    }
+
+    private Order getOrderIfExists(long orderId) {
         Optional<Order> possibleOrder = orderRepository.findById(orderId);
         if(possibleOrder.isEmpty()){
             throw new NoSuchElementException("Order with given id does not exist");
         }
-        Order order = possibleOrder.get();
-        order.deliverOrder();
-        return orderRepository.save(order);
+        return possibleOrder.get();
     }
 }
