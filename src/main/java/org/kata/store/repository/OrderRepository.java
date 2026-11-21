@@ -17,5 +17,7 @@ public interface OrderRepository {
 
     Optional<Order> findById(long id);
 
-    int count();
+    long count();
+
+    Order update(Order order);
 }

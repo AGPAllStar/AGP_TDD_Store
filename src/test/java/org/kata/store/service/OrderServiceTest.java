@@ -103,14 +103,14 @@ class OrderServiceTest {
         order.setId(1L);
         order.setUserId(1L);
         when(orderRepository.findById(order.getId())).thenReturn(Optional.of(order));
-        when(orderRepository.save(order)).thenReturn(order);
+        when(orderRepository.update(order)).thenReturn(order);
 
         // Act
         Order result = orderService.processOrder(order.getId());
 
         // Assert
         assertEquals(OrderStatus.PROCESSED, result.getStatus());
-        verify(orderRepository).save(order);
+        verify(orderRepository).update(order);
     }
 
     @Test
@@ -122,14 +122,14 @@ class OrderServiceTest {
         order.setId(1L);
         order.setUserId(1L);
         when(orderRepository.findById(order.getId())).thenReturn(Optional.of(order));
-        when(orderRepository.save(order)).thenReturn(order);
+        when(orderRepository.update(order)).thenReturn(order);
 
         // Act
         Order result = orderService.dispatchOrder(order.getId());
 
         // Assert
         assertEquals(OrderStatus.DISPATCHED, result.getStatus());
-        verify(orderRepository).save(order);
+        verify(orderRepository).update(order);
     }
 
     @Test
@@ -141,14 +141,14 @@ class OrderServiceTest {
         order.setId(1L);
         order.setUserId(1L);
         when(orderRepository.findById(order.getId())).thenReturn(Optional.of(order));
-        when(orderRepository.save(order)).thenReturn(order);
+        when(orderRepository.update(order)).thenReturn(order);
 
         // Act
         Order result = orderService.deliverOrder(order.getId());
 
         // Assert
         assertEquals(OrderStatus.DELIVERED, result.getStatus());
-        verify(orderRepository).save(order);
+        verify(orderRepository).update(order);
     }
 
     @Test

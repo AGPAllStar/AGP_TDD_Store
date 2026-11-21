@@ -17,5 +17,17 @@ public enum OrderStatus {
     DRAFT,
     PROCESSED,
     DISPATCHED,
-    DELIVERED
+    DELIVERED;
+
+    public static OrderStatus fromInt(int value) {
+        for (OrderStatus status : OrderStatus.values()) {
+            if (status.ordinal() == value) {
+                return status;
+            }
+        }
+
+        throw new IllegalArgumentException(
+                "Not valid state: " + value
+        );
+    }
 }

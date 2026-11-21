@@ -20,5 +20,7 @@ public interface UserRepository {
 
     User save(User user);
 
-    int count();
+    long count();
+
+    User update(User user);
 }

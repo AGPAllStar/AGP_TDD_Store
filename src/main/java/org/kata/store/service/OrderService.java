@@ -4,7 +4,6 @@ import org.kata.store.domain.Order;
 import org.kata.store.repository.OrderRepository;
 import org.kata.store.service.exceptions.RepeatedIdException;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -42,19 +41,19 @@ public class OrderService {
     public Order processOrder(long orderId) {
         Order order = getOrderIfExists(orderId);
         order.processOrder();
-        return orderRepository.save(order);
+        return orderRepository.update(order);
     }
 
     public Order dispatchOrder(long orderId) {
         Order order = getOrderIfExists(orderId);
         order.dispatchOrder();
-        return orderRepository.save(order);
+        return orderRepository.update(order);
     }
 
     public Order deliverOrder(long orderId) {
         Order order = getOrderIfExists(orderId);
         order.deliverOrder();
-        return orderRepository.save(order);
+        return orderRepository.update(order);
     }
 
     private Order getOrderIfExists(long orderId) {

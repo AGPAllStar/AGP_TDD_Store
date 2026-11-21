@@ -14,11 +14,13 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /*
- * TODO: Prueba de integración (repositorio en memoria obligatorio, TestContainers opcional).
+ * Prueba de integración (repositorio en memoria obligatorio, TestContainers opcional).
  *
  * A diferencia de los tests unitarios, aquí NO se usan mocks: se conectan las piezas reales
  * (servicios + repositorios) y se prueba un flujo completo. Por ejemplo:
@@ -37,13 +39,7 @@ class OrderRegistryIT {
 
     @Container
     static PostgreSQLContainer<?> postgres =
-            new PostgreSQLContainer<>("postgres:16");
-
-    private UserService userService;
-    private OrderService orderService;
-
-    private UserRepository userRepository;
-    private OrderRepository orderRepository;
+            new PostgreSQLContainer<>("postgres:15");
 
     @Test
     void createUserAndOrderToDeliver() {
@@ -53,11 +49,11 @@ class OrderRegistryIT {
         // Arrange
         postgres.start();
 
-        var userRepository = new UserPostgreRepository(
+        UserRepository userRepository = new UserPostgreRepository(
                 postgres.getJdbcUrl(),
                 postgres.getUsername(),
                 postgres.getPassword());
-        userService = new UserService(userRepository);
+        UserService userService = new UserService(userRepository);
 
         User user = new User();
         user.setId(1L);
@@ -69,17 +65,21 @@ class OrderRegistryIT {
 
         // Assert
         assertEquals(1, userRepository.count());
-        assertTrue(userRepository.findById(user.getId()).isPresent());
+        Optional<User> registeredUser = userRepository.findById(user.getId());
+        assertTrue(registeredUser.isPresent());
+        assertEquals(user.getId(), registeredUser.get().getId());
+        assertEquals(user.getName(), registeredUser.get().getName());
+        assertEquals(user.getSurname(), registeredUser.get().getSurname());
 
         /*
             2- Register order
          */
         // Arrange
-        var orderRepository = new OrderPostgreRepository(
+        OrderRepository orderRepository = new OrderPostgreRepository(
                 postgres.getJdbcUrl(),
                 postgres.getUsername(),
                 postgres.getPassword());
-        orderService = new OrderService(orderRepository, userService);
+        OrderService orderService = new OrderService(orderRepository, userService);
 
         Order order = new Order();
         order.setId(1L);
@@ -91,7 +91,12 @@ class OrderRegistryIT {
 
         // Assert
         assertEquals(1, orderRepository.count());
-        assertTrue(orderRepository.findById(order.getId()).isPresent());
+        Optional<Order> createdOrder = orderRepository.findById(order.getId());
+        assertTrue(createdOrder.isPresent());
+        assertEquals(order.getId(), createdOrder.get().getId());
+        assertEquals(order.getPrice(), createdOrder.get().getPrice());
+        assertEquals(order.getStatus(), createdOrder.get().getStatus());
+        assertEquals(order.getUserId(), createdOrder.get().getUserId());
 
         /*
             3- Process order
@@ -101,7 +106,9 @@ class OrderRegistryIT {
 
         // Assert
         assertEquals(1, orderRepository.count());
-        assertEquals(OrderStatus.PROCESSED, orderRepository.findById(order.getId()).get().getStatus());
+        Optional<Order> updatedOrder = orderRepository.findById(order.getId());
+        assertTrue(updatedOrder.isPresent());
+        assertEquals(OrderStatus.PROCESSED, updatedOrder.get().getStatus());
 
         /*
             4- Dispatch order
@@ -111,7 +118,9 @@ class OrderRegistryIT {
 
         // Assert
         assertEquals(1, orderRepository.count());
-        assertEquals(OrderStatus.DISPATCHED, orderRepository.findById(order.getId()).get().getStatus());
+        updatedOrder = orderRepository.findById(order.getId());
+        assertTrue(updatedOrder.isPresent());
+        assertEquals(OrderStatus.DISPATCHED, updatedOrder.get().getStatus());
 
         /*
             5- Deliver order
@@ -121,6 +130,8 @@ class OrderRegistryIT {
 
         // Assert
         assertEquals(1, orderRepository.count());
-        assertEquals(OrderStatus.DELIVERED, orderRepository.findById(order.getId()).get().getStatus());
+        updatedOrder = orderRepository.findById(order.getId());
+        assertTrue(updatedOrder.isPresent());
+        assertEquals(OrderStatus.DELIVERED, updatedOrder.get().getStatus());
     }
 }
