@@ -2,6 +2,8 @@ package org.kata.store.repository;
 
 import org.kata.store.domain.Order;
 
+import java.util.Optional;
+
 /*
  * Almacén de pedidos.
  *
@@ -13,5 +15,7 @@ import org.kata.store.domain.Order;
 public interface OrderRepository {
     Order save(Order order);
 
-    Order findById(long id);
+    Optional<Order> findById(long id);
+
+    int count();
 }

@@ -38,19 +38,19 @@ public class OrderService {
     }
 
     public Order processOrder(long orderId) {
-        Order order = orderRepository.findById(orderId);
+        Order order = orderRepository.findById(orderId).get();
         order.processOrder();
         return orderRepository.save(order);
     }
 
     public Order dispatchOrder(long orderId) {
-        Order order = orderRepository.findById(orderId);
+        Order order = orderRepository.findById(orderId).get();
         order.dispatchOrder();
         return orderRepository.save(order);
     }
 
     public Order deliverOrder(long orderId) {
-        Order order = orderRepository.findById(orderId);
+        Order order = orderRepository.findById(orderId).get();
         order.deliverOrder();
         return orderRepository.save(order);
     }
