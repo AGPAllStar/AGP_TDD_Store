@@ -12,6 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -101,7 +102,7 @@ class OrderServiceTest {
         Order order = new Order();
         order.setId(1L);
         order.setUserId(1L);
-        when(orderRepository.findById(order.getId())).thenReturn(order);
+        when(orderRepository.findById(order.getId())).thenReturn(Optional.of(order));
         when(orderRepository.save(order)).thenReturn(order);
 
         // Act
@@ -120,7 +121,7 @@ class OrderServiceTest {
         Order order = new Order(OrderStatus.PROCESSED);
         order.setId(1L);
         order.setUserId(1L);
-        when(orderRepository.findById(order.getId())).thenReturn(order);
+        when(orderRepository.findById(order.getId())).thenReturn(Optional.of(order));
         when(orderRepository.save(order)).thenReturn(order);
 
         // Act
@@ -139,7 +140,7 @@ class OrderServiceTest {
         Order order = new Order(OrderStatus.DISPATCHED);
         order.setId(1L);
         order.setUserId(1L);
-        when(orderRepository.findById(order.getId())).thenReturn(order);
+        when(orderRepository.findById(order.getId())).thenReturn(Optional.of(order));
         when(orderRepository.save(order)).thenReturn(order);
 
         // Act
@@ -159,7 +160,7 @@ class OrderServiceTest {
         Order order = new Order(OrderStatus.DISPATCHED);
         order.setId(orderId);
         order.setUserId(orderId);
-        when(orderRepository.findById(orderId)).thenReturn(order);
+        when(orderRepository.findById(orderId)).thenReturn(Optional.of(order));
 
         try{
             // Act
@@ -183,7 +184,7 @@ class OrderServiceTest {
         Order order = new Order(OrderStatus.PROCESSED);
         order.setId(orderId);
         order.setUserId(orderId);
-        when(orderRepository.findById(orderId)).thenReturn(order);
+        when(orderRepository.findById(orderId)).thenReturn(Optional.of(order));
 
         try{
             // Act
@@ -207,7 +208,7 @@ class OrderServiceTest {
         Order order = new Order(OrderStatus.DELIVERED);
         order.setId(orderId);
         order.setUserId(orderId);
-        when(orderRepository.findById(orderId)).thenReturn(order);
+        when(orderRepository.findById(orderId)).thenReturn(Optional.of(order));
 
         try{
             // Act
@@ -231,7 +232,7 @@ class OrderServiceTest {
         Order order = new Order(OrderStatus.DRAFT);
         order.setId(orderId);
         order.setUserId(orderId);
-        when(orderRepository.findById(orderId)).thenReturn(order);
+        when(orderRepository.findById(orderId)).thenReturn(Optional.of(order));
 
         try{
             // Act
@@ -255,7 +256,7 @@ class OrderServiceTest {
         Order order = new Order(OrderStatus.DISPATCHED);
         order.setId(orderId);
         order.setUserId(orderId);
-        when(orderRepository.findById(orderId)).thenReturn(order);
+        when(orderRepository.findById(orderId)).thenReturn(Optional.of(order));
 
         try{
             // Act
@@ -279,7 +280,7 @@ class OrderServiceTest {
         Order order = new Order(OrderStatus.DELIVERED);
         order.setId(orderId);
         order.setUserId(orderId);
-        when(orderRepository.findById(orderId)).thenReturn(order);
+        when(orderRepository.findById(orderId)).thenReturn(Optional.of(order));
 
         try{
             // Act
@@ -303,7 +304,7 @@ class OrderServiceTest {
         Order order = new Order(OrderStatus.DRAFT);
         order.setId(orderId);
         order.setUserId(orderId);
-        when(orderRepository.findById(orderId)).thenReturn(order);
+        when(orderRepository.findById(orderId)).thenReturn(Optional.of(order));
 
         try{
             // Act
@@ -327,7 +328,7 @@ class OrderServiceTest {
         Order order = new Order(OrderStatus.PROCESSED);
         order.setId(orderId);
         order.setUserId(orderId);
-        when(orderRepository.findById(orderId)).thenReturn(order);
+        when(orderRepository.findById(orderId)).thenReturn(Optional.of(order));
 
         try{
             // Act
@@ -351,7 +352,7 @@ class OrderServiceTest {
         Order order = new Order(OrderStatus.DELIVERED);
         order.setId(orderId);
         order.setUserId(orderId);
-        when(orderRepository.findById(orderId)).thenReturn(order);
+        when(orderRepository.findById(orderId)).thenReturn(Optional.of(order));
 
         try{
             // Act
@@ -364,5 +365,26 @@ class OrderServiceTest {
 
         // Assert
         verify(orderRepository, never()).save(order);
+    }
+
+    @Test
+    void shouldNotProcessNotExistingOrder() {
+        // Arrange
+        long orderId = 1L;
+        userService = new UserService(userRepository);
+        orderService = new OrderService(orderRepository, userService);
+        when(orderRepository.findById(orderId)).thenReturn(Optional.empty());
+
+        try{
+            // Act
+            orderService.processOrder(orderId);
+            fail("Should have thrown a NoSuchElementException");
+        }catch(NoSuchElementException e) {
+            // Assert
+            assertEquals("Order with given id does not exist", e.getMessage());
+        }
+
+        // Assert
+        verify(orderRepository, never()).save(any());
     }
 }
