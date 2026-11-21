@@ -72,23 +72,7 @@ public class UserPostgreRepository implements UserRepository {
 
     @Override
     public User save(User user) {
-        Connection connection = null;
-
-        try {
-            connection = DriverManager.getConnection(
-                    jdbcUrl,
-                    username,
-                    password
-            );
-        } catch (SQLException e) {
-            throw new RuntimeException("Cannot connect to database");
-        }
-
-        try {
-            createTableIfDoesNotExist(connection);
-        } catch (SQLException e) {
-            throw new RuntimeException("Problem creating the table");
-        }
+        Connection connection = getConnection();
 
         String sql = "INSERT INTO users (id, name, surname) VALUES (?, ?, ?)";
 
@@ -114,23 +98,7 @@ public class UserPostgreRepository implements UserRepository {
 
     @Override
     public long count() {
-        Connection connection = null;
-
-        try {
-            connection = DriverManager.getConnection(
-                    jdbcUrl,
-                    username,
-                    password
-            );
-        } catch (SQLException e) {
-            throw new RuntimeException("Cannot connect to database");
-        }
-
-        try {
-            createTableIfDoesNotExist(connection);
-        } catch (SQLException e) {
-            throw new RuntimeException("Problem creating the table");
-        }
+        Connection connection = getConnection();
 
         String sql = "SELECT COUNT(*) AS total_rows FROM users";
 
@@ -160,23 +128,7 @@ public class UserPostgreRepository implements UserRepository {
 
     @Override
     public User update(User user) {
-        Connection connection = null;
-
-        try {
-            connection = DriverManager.getConnection(
-                    jdbcUrl,
-                    username,
-                    password
-            );
-        } catch (SQLException e) {
-            throw new RuntimeException("Cannot connect to database");
-        }
-
-        try {
-            createTableIfDoesNotExist(connection);
-        } catch (SQLException e) {
-            throw new RuntimeException("Problem creating the table");
-        }
+        Connection connection = getConnection();
 
         String sql = "UPDATE users SET name = ?, surname = ? WHERE id = ?";
 
@@ -197,6 +149,27 @@ public class UserPostgreRepository implements UserRepository {
         }
 
         return user;
+    }
+
+    private Connection getConnection() {
+        Connection connection = null;
+        try {
+            connection = DriverManager.getConnection(
+                    jdbcUrl,
+                    username,
+                    password
+            );
+        } catch (SQLException e) {
+            throw new RuntimeException("Cannot connect to database");
+        }
+
+        try {
+            createTableIfDoesNotExist(connection);
+        } catch (SQLException e) {
+            throw new RuntimeException("Problem creating the table");
+        }
+
+        return connection;
     }
 
     private void createTableIfDoesNotExist(Connection connection) throws SQLException {

@@ -20,23 +20,7 @@ public class OrderPostgreRepository implements OrderRepository {
 
     @Override
     public Order save(Order order) {
-        Connection connection = null;
-
-        try {
-            connection = DriverManager.getConnection(
-                    jdbcUrl,
-                    username,
-                    password
-            );
-        } catch (SQLException e) {
-            throw new RuntimeException("Cannot connect to database");
-        }
-
-        try {
-            createTableIfDoesNotExist(connection);
-        } catch (SQLException e) {
-            throw new RuntimeException("Problem creating the table");
-        }
+        Connection connection = getConnection();
 
         String sql = "INSERT INTO orders (id, price, status, user_id) VALUES (?, ?, ?, ?)";
 
@@ -63,23 +47,7 @@ public class OrderPostgreRepository implements OrderRepository {
 
     @Override
     public Optional<Order> findById(long id) {
-        Connection connection = null;
-
-        try {
-            connection = DriverManager.getConnection(
-                    jdbcUrl,
-                    username,
-                    password
-            );
-        } catch (SQLException e) {
-            throw new RuntimeException("Cannot connect to database");
-        }
-
-        try {
-            createTableIfDoesNotExist(connection);
-        } catch (SQLException e) {
-            throw new RuntimeException("Problem creating the table");
-        }
+        Connection connection = getConnection();
 
         String sql = "SELECT * FROM orders WHERE id = ?";
 
@@ -115,23 +83,7 @@ public class OrderPostgreRepository implements OrderRepository {
 
     @Override
     public long count() {
-        Connection connection = null;
-
-        try {
-            connection = DriverManager.getConnection(
-                    jdbcUrl,
-                    username,
-                    password
-            );
-        } catch (SQLException e) {
-            throw new RuntimeException("Cannot connect to database");
-        }
-
-        try {
-            createTableIfDoesNotExist(connection);
-        } catch (SQLException e) {
-            throw new RuntimeException("Problem creating the table");
-        }
+        Connection connection = getConnection();
 
         String sql = "SELECT COUNT(*) AS total_rows FROM orders";
 
@@ -161,23 +113,7 @@ public class OrderPostgreRepository implements OrderRepository {
 
     @Override
     public Order update(Order order) {
-        Connection connection = null;
-
-        try {
-            connection = DriverManager.getConnection(
-                    jdbcUrl,
-                    username,
-                    password
-            );
-        } catch (SQLException e) {
-            throw new RuntimeException("Cannot connect to database");
-        }
-
-        try {
-            createTableIfDoesNotExist(connection);
-        } catch (SQLException e) {
-            throw new RuntimeException("Problem creating the table");
-        }
+        Connection connection = getConnection();
 
         String sql = "UPDATE orders SET price = ?, status = ?, user_id = ? WHERE id = ?";
 
@@ -199,6 +135,27 @@ public class OrderPostgreRepository implements OrderRepository {
         }
 
         return order;
+    }
+
+    private Connection getConnection() {
+        Connection connection = null;
+        try {
+            connection = DriverManager.getConnection(
+                    jdbcUrl,
+                    username,
+                    password
+            );
+        } catch (SQLException e) {
+            throw new RuntimeException("Cannot connect to database");
+        }
+
+        try {
+            createTableIfDoesNotExist(connection);
+        } catch (SQLException e) {
+            throw new RuntimeException("Problem creating the table");
+        }
+
+        return connection;
     }
 
     private void createTableIfDoesNotExist(Connection connection) throws SQLException {
