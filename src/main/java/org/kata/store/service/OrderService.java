@@ -60,7 +60,11 @@ public class OrderService {
     }
 
     public Order deliverOrder(long orderId) {
-        Order order = orderRepository.findById(orderId).get();
+        Optional<Order> possibleOrder = orderRepository.findById(orderId);
+        if(possibleOrder.isEmpty()){
+            throw new NoSuchElementException("Order with given id does not exist");
+        }
+        Order order = possibleOrder.get();
         order.deliverOrder();
         return orderRepository.save(order);
     }
