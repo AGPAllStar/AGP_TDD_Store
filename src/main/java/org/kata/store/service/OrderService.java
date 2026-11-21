@@ -5,6 +5,8 @@ import org.kata.store.repository.OrderRepository;
 import org.kata.store.service.exceptions.RepeatedIdException;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 /*
  * Registro de pedidos.
@@ -38,7 +40,11 @@ public class OrderService {
     }
 
     public Order processOrder(long orderId) {
-        Order order = orderRepository.findById(orderId).get();
+        Optional<Order> possibleOrder = orderRepository.findById(orderId);
+        if(possibleOrder.isEmpty()){
+            throw new NoSuchElementException("Order with given id does not exist");
+        }
+        Order order = possibleOrder.get();
         order.processOrder();
         return orderRepository.save(order);
     }
