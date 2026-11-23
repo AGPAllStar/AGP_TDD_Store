@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public class OrderPostgreRepository implements OrderRepository {
 
-    private org.kata.store.service.ConnectionBuilder connectionBuilder;
+    private ConnectionBuilder connectionBuilder;
 
     public OrderPostgreRepository(ConnectionBuilder connectionBuilder) {
         this.connectionBuilder = connectionBuilder;
@@ -76,29 +76,10 @@ public class OrderPostgreRepository implements OrderRepository {
 
     @Override
     public long count() {
-        Connection connection = connectionBuilder.getConnection();
-        PreparedStatement statement = null;
-        ResultSet result = null;
-        long rt = 0L;
-
-        try {
-            connectionBuilder.createTableIfDoesNotExist(connection, getSQLQueryToCreateTables());
-
-            String sql = "SELECT COUNT(*) AS total_rows FROM orders";
-
-            statement = connection.prepareStatement(sql);
-
-            result = statement.executeQuery();
-            if (result.next()) {
-                rt = result.getLong("total_rows");
-            }
-        } catch (SQLException e) {
-            throw new PostgreSQLException("Problem executing the count query");
-        } finally {
-            connectionBuilder.closeComponents(result, statement, connection);
-        }
-
-        return rt;
+        return connectionBuilder.count(
+                "SELECT COUNT(*) AS total_rows FROM orders",
+                getSQLQueryToCreateTables()
+        );
     }
 
     @Override

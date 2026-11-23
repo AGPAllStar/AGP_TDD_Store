@@ -69,4 +69,28 @@ public class ConnectionBuilder {
         }
         closeComponents(statement, connection);
     }
+
+    public long count(String sqlQuery, String queryToCreateTables) {
+        Connection connection = getConnection();
+        PreparedStatement statement = null;
+        ResultSet result = null;
+        long rt = 0L;
+
+        try {
+            createTableIfDoesNotExist(connection, queryToCreateTables);
+
+            statement = connection.prepareStatement(sqlQuery);
+
+            result = statement.executeQuery();
+            if (result.next()) {
+                rt = result.getLong("total_rows");
+            }
+        } catch (SQLException e) {
+            throw new PostgreSQLException("Problem executing the count query");
+        } finally {
+            closeComponents(result, statement, connection);
+        }
+
+        return rt;
+    }
 }
