@@ -1,61 +1,36 @@
 package org.kata.store.repository;
 
-import org.kata.store.domain.Order;
 import org.kata.store.domain.User;
+import org.kata.store.service.ConnectionBuilder;
+import org.kata.store.service.exceptions.PostgreSQLException;
 
 import java.sql.*;
 import java.util.Optional;
 
 public class UserPostgreRepository implements UserRepository {
 
-    private final String jdbcUrl;
-    private final String username;
-    private final String password;
+    private ConnectionBuilder connectionBuilder;
 
-    public UserPostgreRepository(String jdbcUrl, String username, String password) {
-        this.jdbcUrl = jdbcUrl;
-        this.username = username;
-        this.password = password;
+    public UserPostgreRepository(ConnectionBuilder connectionBuilder) {
+        this.connectionBuilder = connectionBuilder;
     }
 
     @Override
     public Optional<User> findById(Long id) {
-        Connection connection = null;
-
-        try {
-            connection = DriverManager.getConnection(
-                    jdbcUrl,
-                    username,
-                    password
-            );
-        } catch (SQLException e) {
-            throw new RuntimeException("Cannot connect to database");
-        }
-
-        try {
-            createTableIfDoesNotExist(connection);
-        } catch (SQLException e) {
-            throw new RuntimeException("Problem creating the table");
-        }
-
-        String sql = "SELECT * FROM users WHERE id = ?";
-
+        Connection connection = connectionBuilder.getConnection();
         PreparedStatement statement = null;
+        ResultSet result = null;
+        Optional<User> rt = Optional.empty();
+
         try {
+            connectionBuilder.createTableIfDoesNotExist(connection, getSQLQueryToCreateTables());
+
+            String sql = "SELECT * FROM users WHERE id = ?";
+
             statement = connection.prepareStatement(sql);
             statement.setLong(1, id);
-        } catch (SQLException e) {
-            throw new RuntimeException("Problem preparing the statement");
-        }
 
-        ResultSet result = null;
-        try {
             result = statement.executeQuery();
-        } catch (SQLException e) {
-            throw new RuntimeException("Problem executing the query");
-        }
-
-        try {
             if (result.next()) {
                 User user = new User();
                 user.setId(result.getLong("id"));
@@ -64,33 +39,34 @@ public class UserPostgreRepository implements UserRepository {
                 return Optional.of(user);
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Error obtaining the result");
+            throw new PostgreSQLException("Problem executing the findById query");
+        } finally {
+            connectionBuilder.closeComponents(result, statement, connection);
         }
 
-        return Optional.empty();
+        return rt;
     }
 
     @Override
     public User save(User user) {
-        Connection connection = getConnection();
-
-        String sql = "INSERT INTO users (id, name, surname) VALUES (?, ?, ?)";
-
+        Connection connection = connectionBuilder.getConnection();
         PreparedStatement statement = null;
+
         try {
+            connectionBuilder.createTableIfDoesNotExist(connection, getSQLQueryToCreateTables());
+
+            String sql = "INSERT INTO users (id, name, surname) VALUES (?, ?, ?)";
+
             statement = connection.prepareStatement(sql);
             statement.setLong(1, user.getId());
             statement.setString(2, user.getName());
             statement.setString(3, user.getSurname());
-        } catch (SQLException e) {
-            throw new RuntimeException("Problem preparing the statement");
-        }
 
-        int result = -1;
-        try {
-            result = statement.executeUpdate();
+            statement.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException("Problem executing the query");
+            throw new PostgreSQLException("Problem executing the save query");
+        } finally {
+            connectionBuilder.closeComponents(statement, connection);
         }
 
         return user;
@@ -98,90 +74,38 @@ public class UserPostgreRepository implements UserRepository {
 
     @Override
     public long count() {
-        Connection connection = getConnection();
-
-        String sql = "SELECT COUNT(*) AS total_rows FROM users";
-
+        Connection connection = connectionBuilder.getConnection();
         PreparedStatement statement = null;
-        try {
-            statement = connection.prepareStatement(sql);
-        } catch (SQLException e) {
-            throw new RuntimeException("Problem preparing the statement");
-        }
-
         ResultSet result = null;
-        try {
-            result = statement.executeQuery();
-        } catch (SQLException e) {
-            throw new RuntimeException("Problem executing the query");
-        }
+        long rt = 0L;
 
         try {
+            connectionBuilder.createTableIfDoesNotExist(connection, getSQLQueryToCreateTables());
+
+            String sql = "SELECT COUNT(*) AS total_rows FROM users";
+
+            statement = connection.prepareStatement(sql);
+
+            result = statement.executeQuery();
             if (result.next()) {
-                return result.getLong("total_rows");
+                rt = result.getLong("total_rows");
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Error obtaining the result");
+            throw new PostgreSQLException("Problem executing the count query");
+        } finally {
+            connectionBuilder.closeComponents(result, statement, connection);
         }
-        return -1;
+
+        return rt;
     }
 
-    @Override
-    public User update(User user) {
-        Connection connection = getConnection();
-
-        String sql = "UPDATE users SET name = ?, surname = ? WHERE id = ?";
-
-        PreparedStatement statement = null;
-        try {
-            statement = connection.prepareStatement(sql);
-            statement.setLong(1, user.getId());
-            statement.setString(2, user.getName());
-            statement.setString(3, user.getSurname());
-        } catch (SQLException e) {
-            throw new RuntimeException("Problem preparing the statement");
-        }
-
-        try {
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException("Problem executing the query");
-        }
-
-        return user;
-    }
-
-    private Connection getConnection() {
-        Connection connection = null;
-        try {
-            connection = DriverManager.getConnection(
-                    jdbcUrl,
-                    username,
-                    password
-            );
-        } catch (SQLException e) {
-            throw new RuntimeException("Cannot connect to database");
-        }
-
-        try {
-            createTableIfDoesNotExist(connection);
-        } catch (SQLException e) {
-            throw new RuntimeException("Problem creating the table");
-        }
-
-        return connection;
-    }
-
-    private void createTableIfDoesNotExist(Connection connection) throws SQLException {
-        String sql = """
-            CREATE TABLE IF NOT EXISTS users (
-                id BIGSERIAL PRIMARY KEY,
-                name VARCHAR(100) NOT NULL,
-                surname VARCHAR(100) NOT NULL
-            )
-        """;
-
-        PreparedStatement statement = connection.prepareStatement(sql);
-        statement.executeUpdate();
+    private String getSQLQueryToCreateTables() {
+        return """
+                CREATE TABLE IF NOT EXISTS users (
+                    id BIGSERIAL PRIMARY KEY,
+                    name VARCHAR(100) NOT NULL,
+                    surname VARCHAR(100) NOT NULL
+                )
+            """;
     }
 }

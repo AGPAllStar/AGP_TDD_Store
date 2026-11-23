@@ -21,6 +21,4 @@ public interface UserRepository {
     User save(User user);
 
     long count();
-
-    User update(User user);
 }

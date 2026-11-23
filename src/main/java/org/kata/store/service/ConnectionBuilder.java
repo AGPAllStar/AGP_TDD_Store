@@ -1,0 +1,72 @@
+package org.kata.store.service;
+
+import org.kata.store.service.exceptions.PostgreSQLException;
+
+import java.sql.*;
+
+public class ConnectionBuilder {
+
+    private final String jdbcUrl;
+    private final String username;
+    private final String password;
+
+    public ConnectionBuilder(String jdbcUrl, String username, String password) {
+        this.jdbcUrl = jdbcUrl;
+        this.username = username;
+        this.password = password;
+    }
+
+    public Connection getConnection() {
+        Connection connection = null;
+        try {
+            connection = DriverManager.getConnection(
+                    jdbcUrl,
+                    username,
+                    password
+            );
+        } catch (SQLException e) {
+            throw new PostgreSQLException("Cannot connect to database");
+        }
+        return connection;
+    }
+
+    public void createTableIfDoesNotExist(Connection connection, String sqlQuery) throws SQLException {
+        PreparedStatement statement = null;
+        try{
+            statement = connection.prepareStatement(sqlQuery);
+            statement.executeUpdate();
+        } finally {
+            if(statement != null){
+                statement.close();
+            }
+        }
+    }
+
+    public void closeComponents(PreparedStatement statement, Connection connection){
+        if (statement != null) {
+            try{
+                statement.close();
+            } catch (SQLException e) {
+                throw new PostgreSQLException("Problem closing the Statement");
+            }
+        }
+        if (connection != null) {
+            try{
+                connection.close();
+            } catch (SQLException e) {
+                throw new PostgreSQLException("Problem closing the Connection");
+            }
+        }
+    }
+
+    public void closeComponents(ResultSet resultSet, PreparedStatement statement, Connection connection){
+        if (resultSet != null) {
+            try{
+                resultSet.close();
+            } catch (SQLException e) {
+                throw new PostgreSQLException("Problem closing the ResultSet");
+            }
+        }
+        closeComponents(statement, connection);
+    }
+}

@@ -8,6 +8,7 @@ import org.kata.store.repository.OrderPostgreRepository;
 import org.kata.store.repository.OrderRepository;
 import org.kata.store.repository.UserPostgreRepository;
 import org.kata.store.repository.UserRepository;
+import org.kata.store.service.ConnectionBuilder;
 import org.kata.store.service.OrderService;
 import org.kata.store.service.UserService;
 import org.testcontainers.containers.PostgreSQLContainer;
@@ -43,16 +44,19 @@ class OrderRegistryIT {
 
     @Test
     void createUserAndOrderToDeliver() {
+        ConnectionBuilder connBuild = new ConnectionBuilder(
+                postgres.getJdbcUrl(),
+                postgres.getUsername(),
+                postgres.getPassword()
+        );
+
         /*
             1- Register user
          */
         // Arrange
         postgres.start();
 
-        UserRepository userRepository = new UserPostgreRepository(
-                postgres.getJdbcUrl(),
-                postgres.getUsername(),
-                postgres.getPassword());
+        UserRepository userRepository = new UserPostgreRepository(connBuild);
         UserService userService = new UserService(userRepository);
 
         User user = new User();
@@ -75,10 +79,7 @@ class OrderRegistryIT {
             2- Register order
          */
         // Arrange
-        OrderRepository orderRepository = new OrderPostgreRepository(
-                postgres.getJdbcUrl(),
-                postgres.getUsername(),
-                postgres.getPassword());
+        OrderRepository orderRepository = new OrderPostgreRepository(connBuild);
         OrderService orderService = new OrderService(orderRepository, userService);
 
         Order order = new Order();
