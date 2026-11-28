@@ -1,6 +1,6 @@
 package org.kata.store.repository;
 
-import org.kata.store.service.exceptions.PostgreSQLException;
+import org.kata.store.service.exceptions.SQLConnectionException;
 
 import java.sql.*;
 
@@ -35,7 +35,7 @@ public class ConnectionBuilder {
                 );
             }
         } catch (SQLException e) {
-            throw new PostgreSQLException("Cannot connect to database", e);
+            throw new SQLConnectionException("Cannot connect to database", e);
         }
         return connection;
     }
@@ -57,14 +57,14 @@ public class ConnectionBuilder {
             try{
                 statement.close();
             } catch (SQLException e) {
-                throw new PostgreSQLException("Problem closing the Statement");
+                throw new SQLConnectionException("Problem closing the Statement");
             }
         }
         if (connection != null) {
             try{
                 connection.close();
             } catch (SQLException e) {
-                throw new PostgreSQLException("Problem closing the Connection");
+                throw new SQLConnectionException("Problem closing the Connection");
             }
         }
     }
@@ -74,7 +74,7 @@ public class ConnectionBuilder {
             try{
                 resultSet.close();
             } catch (SQLException e) {
-                throw new PostgreSQLException("Problem closing the ResultSet");
+                throw new SQLConnectionException("Problem closing the ResultSet");
             }
         }
         closeComponents(statement, connection);
@@ -96,7 +96,7 @@ public class ConnectionBuilder {
                 rt = result.getLong("total_rows");
             }
         } catch (SQLException e) {
-            throw new PostgreSQLException("Problem executing the count query");
+            throw new SQLConnectionException("Problem executing the count query");
         } finally {
             closeComponents(result, statement, connection);
         }

@@ -1,7 +1,7 @@
 package org.kata.store.repository;
 
 import org.kata.store.domain.User;
-import org.kata.store.service.exceptions.PostgreSQLException;
+import org.kata.store.service.exceptions.SQLConnectionException;
 
 import java.sql.*;
 import java.util.Optional;
@@ -38,7 +38,7 @@ public class UserSQLRepository implements UserRepository {
                 return Optional.of(user);
             }
         } catch (SQLException e) {
-            throw new PostgreSQLException("Problem executing the findById query");
+            throw new SQLConnectionException("Problem executing the findById query");
         } finally {
             connectionBuilder.closeComponents(result, statement, connection);
         }
@@ -63,7 +63,7 @@ public class UserSQLRepository implements UserRepository {
 
             statement.executeUpdate();
         } catch (SQLException e) {
-            throw new PostgreSQLException("Problem executing the save query");
+            throw new SQLConnectionException("Problem executing the save query");
         } finally {
             connectionBuilder.closeComponents(statement, connection);
         }

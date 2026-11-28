@@ -2,7 +2,7 @@ package org.kata.store.repository;
 
 import org.kata.store.domain.Order;
 import org.kata.store.domain.OrderStatus;
-import org.kata.store.service.exceptions.PostgreSQLException;
+import org.kata.store.service.exceptions.SQLConnectionException;
 
 import java.sql.*;
 import java.util.Optional;
@@ -33,7 +33,7 @@ public class OrderSQLRepository implements OrderRepository {
 
             statement.executeUpdate();
         } catch (SQLException e) {
-            throw new PostgreSQLException("Problem executing the save query");
+            throw new SQLConnectionException("Problem executing the save query");
         } finally {
             connectionBuilder.closeComponents(statement, connection);
         }
@@ -65,7 +65,7 @@ public class OrderSQLRepository implements OrderRepository {
                 rt = Optional.of(order);
             }
         } catch (SQLException e) {
-            throw new PostgreSQLException("Problem executing the findById query");
+            throw new SQLConnectionException("Problem executing the findById query");
         } finally {
             connectionBuilder.closeComponents(result, statement, connection);
         }
@@ -99,7 +99,7 @@ public class OrderSQLRepository implements OrderRepository {
 
             statement.executeUpdate();
         } catch (SQLException e) {
-            throw new PostgreSQLException("Problem executing the update query");
+            throw new SQLConnectionException("Problem executing the update query");
         } finally {
             connectionBuilder.closeComponents(statement, connection);
         }
