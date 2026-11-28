@@ -1,4 +1,4 @@
-package org.kata.store.service;
+package org.kata.store.repository;
 
 import org.kata.store.service.exceptions.PostgreSQLException;
 
@@ -16,16 +16,26 @@ public class ConnectionBuilder {
         this.password = password;
     }
 
+    public ConnectionBuilder(String jdbcUrl) {
+        this.jdbcUrl = jdbcUrl;
+        this.username = null;
+        this.password = null;
+    }
+
     public Connection getConnection() {
         Connection connection = null;
         try {
-            connection = DriverManager.getConnection(
-                    jdbcUrl,
-                    username,
-                    password
-            );
+            if(username == null || password == null) {
+                connection = DriverManager.getConnection(jdbcUrl);
+            }else{
+                connection = DriverManager.getConnection(
+                        jdbcUrl,
+                        username,
+                        password
+                );
+            }
         } catch (SQLException e) {
-            throw new PostgreSQLException("Cannot connect to database");
+            throw new PostgreSQLException("Cannot connect to database", e);
         }
         return connection;
     }

@@ -1,17 +1,16 @@
 package org.kata.store.repository;
 
 import org.kata.store.domain.User;
-import org.kata.store.service.ConnectionBuilder;
 import org.kata.store.service.exceptions.PostgreSQLException;
 
 import java.sql.*;
 import java.util.Optional;
 
-public class UserPostgreRepository implements UserRepository {
+public class UserSQLRepository implements UserRepository {
 
     private ConnectionBuilder connectionBuilder;
 
-    public UserPostgreRepository(ConnectionBuilder connectionBuilder) {
+    public UserSQLRepository(ConnectionBuilder connectionBuilder) {
         this.connectionBuilder = connectionBuilder;
     }
 

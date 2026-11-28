@@ -1,62 +1,30 @@
 package org.kata.store;
 
-import org.junit.jupiter.api.Test;
 import org.kata.store.domain.Order;
 import org.kata.store.domain.OrderStatus;
 import org.kata.store.domain.User;
-import org.kata.store.repository.OrderPostgreRepository;
+import org.kata.store.repository.OrderSQLRepository;
 import org.kata.store.repository.OrderRepository;
-import org.kata.store.repository.UserPostgreRepository;
+import org.kata.store.repository.UserSQLRepository;
 import org.kata.store.repository.UserRepository;
-import org.kata.store.service.ConnectionBuilder;
+import org.kata.store.repository.ConnectionBuilder;
 import org.kata.store.service.OrderService;
 import org.kata.store.service.UserService;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/*
- * Prueba de integración (repositorio en memoria obligatorio, TestContainers opcional).
- *
- * A diferencia de los tests unitarios, aquí NO se usan mocks: se conectan las piezas reales
- * (servicios + repositorios) y se prueba un flujo completo. Por ejemplo:
- *
- *   dar de alta un usuario -> crear un pedido -> avanzarlo hasta DELIVERED -> comprobar su estado final
- *
- * Opciones:
- *   - Repositorios en memoria (lo mínimo).
- *   - Extra: repositorios con PostgreSQL probados con Testcontainers
- *     (@Testcontainers, @Container y PostgreSQLContainer; las dependencias ya están en el pom.xml).
- *
- * Las clases que terminan en IT las ejecuta maven-failsafe-plugin con `mvn verify`, no con `mvn test`.
- */
-@Testcontainers
-class OrderRegistryIT {
+abstract class AbstractOrderRegistryITest {
 
-    @Container
-    static PostgreSQLContainer<?> postgres =
-            new PostgreSQLContainer<>("postgres:15");
+    ConnectionBuilder connBuild;
 
-    @Test
-    void createUserAndOrderToDeliver() {
-        ConnectionBuilder connBuild = new ConnectionBuilder(
-                postgres.getJdbcUrl(),
-                postgres.getUsername(),
-                postgres.getPassword()
-        );
-
+    void createUserAndOrderToDeliverTest(){
         /*
             1- Register user
          */
-        // Arrange
-        postgres.start();
-
-        UserRepository userRepository = new UserPostgreRepository(connBuild);
+        UserRepository userRepository = new UserSQLRepository(connBuild);
         UserService userService = new UserService(userRepository);
 
         User user = new User();
@@ -79,7 +47,7 @@ class OrderRegistryIT {
             2- Register order
          */
         // Arrange
-        OrderRepository orderRepository = new OrderPostgreRepository(connBuild);
+        OrderRepository orderRepository = new OrderSQLRepository(connBuild);
         OrderService orderService = new OrderService(orderRepository, userService);
 
         Order order = new Order();
@@ -135,4 +103,8 @@ class OrderRegistryIT {
         assertTrue(updatedOrder.isPresent());
         assertEquals(OrderStatus.DELIVERED, updatedOrder.get().getStatus());
     }
+
+    public abstract void setUp();
+
+    public abstract void shutDown();
 }

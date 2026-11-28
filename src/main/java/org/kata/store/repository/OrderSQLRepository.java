@@ -2,17 +2,16 @@ package org.kata.store.repository;
 
 import org.kata.store.domain.Order;
 import org.kata.store.domain.OrderStatus;
-import org.kata.store.service.ConnectionBuilder;
 import org.kata.store.service.exceptions.PostgreSQLException;
 
 import java.sql.*;
 import java.util.Optional;
 
-public class OrderPostgreRepository implements OrderRepository {
+public class OrderSQLRepository implements OrderRepository {
 
     private ConnectionBuilder connectionBuilder;
 
-    public OrderPostgreRepository(ConnectionBuilder connectionBuilder) {
+    public OrderSQLRepository(ConnectionBuilder connectionBuilder) {
         this.connectionBuilder = connectionBuilder;
     }
 
